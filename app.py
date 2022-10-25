@@ -1,4 +1,4 @@
-# SpiderWeb Semester Project
+# GameRview Semester Project
 
 from flask import Flask, request, render_template, redirect, url_for, abort
 from flask import flash
@@ -15,4 +15,4 @@ app.config['SECRET_KEY'] = 'spiderweb'
 
 @app.route('/')
 def index():
-    pass
+    return "GameRview"
