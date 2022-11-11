@@ -1,12 +1,15 @@
 # GameRview Semester Project
 # R. Todd Pinsenschaum II, Andy Beichner, Amy Cunningham, Zach Goniea
 
-from flask import Flask, request, render_template, redirect, url_for, abort
+from flask import Flask, request, render_template, redirect, url_for, abort, session
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
 
+# === Forms ===
+from registerForm import RegisterForm
+
 # === Database Models ===
-from dbModels import Movie
+#from dbModels import Movie
 
 # make sure the script's directory is in Python's import path
 # this is only required when run from a different directory
@@ -50,3 +53,24 @@ with app.app_context():
 @app.route('/')
 def index():
     return "GameRview"
+
+@app.route('/register/', methods=["GET"])
+def get_register():
+    form = RegisterForm()
+    return render_template("register_form.html", form=form)
+
+@app.route('/register/', methods=["POST"])
+def post_register():
+    form = RegisterForm()
+    if form.validate():
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+        session['username'] = username
+        session['email'] = email
+        session['password'] = password
+        return redirect(url_for('get_register'))
+    else: 
+        for field, error in form.errors.items():
+            flash(f"{field}: {error}")
+        return redirect(url_for('get_register'))
