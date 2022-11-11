@@ -5,6 +5,9 @@ from flask import Flask, request, render_template, redirect, url_for, abort
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
 
+# === Database Models ===
+from dbModels import Movie
+
 # make sure the script's directory is in Python's import path
 # this is only required when run from a different directory
 import os, sys
@@ -24,6 +27,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Connect app to SQLite database
 db = SQLAlchemy(app)
 
+
+# === Helper Methods ===
+def read_in_movies():
+    all_movies = []
+    # read in movies
+    return all_movies
+
+
 # Set up database
 with app.app_context():
     # Create the database for this model
@@ -31,11 +42,11 @@ with app.app_context():
     db.create_all()
 
     #db.session.add(Movie(title="The Fellowship of the Ring", year=2001, budget=93000000.0))
+    db.session.add_all(read_in_movies())
     db.session.commit()
 
 
+# === Routes ===
 @app.route('/')
 def index():
     return "GameRview"
-
-
