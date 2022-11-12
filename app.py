@@ -72,7 +72,7 @@ with app.app_context():
 # === Hashing ===
 #pepper = Hasher.random_pepper()
 pepper = read_in_pepper()
-hasher = Hasher(pepper)
+hasher = Hasher(bytes(pepper))
 
 
 # === Routes ===
