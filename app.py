@@ -9,7 +9,11 @@ from flask_sqlalchemy import SQLAlchemy
 from registerForm import RegisterForm
 
 # === Database Models ===
-#from dbModels import Movie
+from dbModels import Movie
+from dbModels import User
+
+# === Hasher ===
+from hasher import Hasher
 
 # make sure the script's directory is in Python's import path
 # this is only required when run from a different directory
@@ -44,7 +48,16 @@ def read_in_users():
     return all_users
 
 
-# Set up database
+def write_out_pepper(pepper_out):
+    pass
+
+
+def read_in_pepper():
+    my_pepper = 0
+    return my_pepper
+
+
+# === Set Up Database ===
 with app.app_context():
     # Create the database for this model
     db.drop_all()
@@ -56,15 +69,23 @@ with app.app_context():
     db.session.commit()
 
 
+# === Hashing ===
+#pepper = Hasher.random_pepper()
+pepper = read_in_pepper()
+hasher = Hasher(pepper)
+
+
 # === Routes ===
 @app.route('/')
 def index():
     return "GameRview"
 
+
 @app.route('/register/', methods=["GET"])
 def get_register():
     form = RegisterForm()
     return render_template("register_form.html", form=form)
+
 
 @app.route('/register/', methods=["POST"])
 def post_register():
@@ -76,6 +97,9 @@ def post_register():
         session['username'] = username
         session['email'] = email
         session['password'] = password
+        #pwd_hash = hasher.hash(password)
+        #db.session.add(User(username=username, email=email, pwd_hash=pwd_hash))
+        #db.session.commit()
         return redirect(url_for('get_register'))
     else: 
         for field, error in form.errors.items():

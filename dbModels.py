@@ -17,4 +17,4 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Unicode, nullable=False)
     email = db.Column(db.Unicode, nullable=False)
-    password = db.Column(db.Unicode, nullable=False)
+    pwd_hash = db.Column(db.Unicode, nullable=False)
