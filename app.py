@@ -38,6 +38,12 @@ def read_in_movies():
     return all_movies
 
 
+def read_in_users():
+    all_users = []
+    # read in users
+    return all_users
+
+
 # Set up database
 with app.app_context():
     # Create the database for this model
@@ -46,6 +52,7 @@ with app.app_context():
 
     #db.session.add(Movie(title="The Fellowship of the Ring", year=2001, budget=93000000.0))
     db.session.add_all(read_in_movies())
+    db.session.add_all(read_in_users())
     db.session.commit()
 
 
