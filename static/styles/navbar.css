@@ -1,5 +1,20 @@
-#nav_bar{
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+#main{
+  color: rgb(253, 253, 253);
+}
+
+#bar{
+  background-color: rgb(12, 2, 48);
+}
+
+.nav-link{
+  color: rgb(237,217,73);
+  text-align: center;
+  background-color: rgba(88, 95, 99, 0);
+  border-radius: 10px;
+  border: 2px solid  rgb(57, 56, 58);
+}
+
+.navbar-toggler-icon{
+  border-radius: 5px;
+  border: 2px solid  rgb(57, 56, 58);
 }
