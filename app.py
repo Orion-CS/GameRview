@@ -8,10 +8,6 @@ from flask_sqlalchemy import SQLAlchemy
 # === Forms ===
 from registerForm import RegisterForm
 
-# === Database Models ===
-from dbModels import Movie
-from dbModels import User
-
 # === Hasher ===
 from hasher import Hasher
 
@@ -33,6 +29,22 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Connect app to SQLite database
 db = SQLAlchemy(app)
+
+# === Database Models ===
+class Movie(db.Model):
+    __tablename__ = 'Movies'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Unicode, nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+    studio = db.Column(db.Unicode, nullable=False)
+
+
+class User(db.Model):
+    __tablename__ = 'Users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.Unicode, nullable=False)
+    email = db.Column(db.Unicode, nullable=False)
+    pwd_hash = db.Column(db.Unicode, nullable=False)
 
 
 # === Helper Methods ===
@@ -78,7 +90,7 @@ hasher = Hasher(bytes(pepper))
 # === Routes ===
 @app.route('/')
 def index():
-    return "GameRview"
+    return render_template("home_page.html")
 
 
 @app.route('/register/', methods=["GET"])
