@@ -1,4 +1,5 @@
 #main{
+  margin-left: 20px;
   color: rgb(253, 253, 253);
 }
 
@@ -6,6 +7,10 @@
   background-color: rgb(12, 2, 48);
 }
 
+.nav-item {
+  margin-left: 40px;
+
+}
 .nav-link{
   color: rgb(237,217,73);
   text-align: center;
