@@ -103,6 +103,12 @@ def get_register():
 def post_register():
     form = RegisterForm()
     if form.validate():
+        users = User.query.all()
+        for user in users:
+            if user.username == form.username.data or user.email == form.email.data:
+                # error not flashing 
+                flash(f"Username or email already taken.")
+                return redirect(url_for('get_register'))
         user = User(username = form.username.data, email = form.email.data, pwd_hash = form.password.data)
         db.session.add(user)
         db.session.commit()
