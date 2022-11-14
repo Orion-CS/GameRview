@@ -103,12 +103,9 @@ def get_register():
 def post_register():
     form = RegisterForm()
     if form.validate():
-        username = form.username.data
-        email = form.email.data
-        password = form.password.data
-        session['username'] = username
-        session['email'] = email
-        session['password'] = password
+        user = User(username = form.username.data, email = form.email.data, pwd_hash = form.password.data)
+        db.session.add(user)
+        db.session.commit()
         #pwd_hash = hasher.hash(password)
         #db.session.add(User(username=username, email=email, pwd_hash=pwd_hash))
         #db.session.commit()
