@@ -60,13 +60,13 @@ def read_in_users():
     return all_users
 
 
-def write_out_pepper(pepper_out):
-    pass
+# def write_out_pepper(pepper_out):
+#     pass
 
 
-def read_in_pepper():
-    my_pepper = 0
-    return my_pepper
+# def read_in_pepper():
+#     my_pepper = 0
+#     return my_pepper
 
 
 # === Set Up Database ===
@@ -81,10 +81,10 @@ with app.app_context():
     db.session.commit()
 
 
-# === Hashing ===
-#pepper = Hasher.random_pepper()
-pepper = read_in_pepper()
-hasher = Hasher(bytes(pepper))
+# # === Hashing ===
+# #pepper = Hasher.random_pepper()
+# pepper = read_in_pepper()
+# hasher = Hasher(bytes(pepper))
 
 
 # === Routes ===
@@ -113,7 +113,7 @@ def post_register():
         #db.session.add(User(username=username, email=email, pwd_hash=pwd_hash))
         #db.session.commit()
         return redirect(url_for('get_register'))
-    else: 
+    else:
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
         return redirect(url_for('get_register'))

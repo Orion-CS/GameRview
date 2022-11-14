@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Register Now</h1>
-    <form action="/register/" method="get">
+    <form action="/register/" method="post">
         {# add CSRF protection #} 
         {{ form.hidden_tag() }}
 
@@ -26,7 +26,7 @@
 
         <div>
         {# add password fields and labels #} 
-        {{ form.password.label}}
+        {{ form.password.label }}
         {{ form.password() }}
         </div>
 
