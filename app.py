@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 # === Forms ===
 from registerForm import RegisterForm
+from reviewForm import ReviewForm
 
 # === Hasher ===
 from hasher import Hasher
@@ -31,8 +32,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # === Database Models ===
-class Movie(db.Model):
-    __tablename__ = 'Movies'
+class VideoGame(db.Model):
+    __tablename__ = 'Video Games'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode, nullable=False)
     year = db.Column(db.Integer, nullable=False)
@@ -120,3 +121,39 @@ def post_register():
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
         return redirect(url_for('get_register'))
+
+@app.route('/review/', methods=['GET'])
+def get_review():
+    form = ReviewForm()
+    return render_template("review_form.html", form=form)
+
+@app.route('/review/', methods=['POST'])
+def post_review():
+    form = ReviewForm()
+    if form.validate():
+        return redirect(url_for('get_review'))
+    else:
+        for field, error in form.errors.items():
+            flash(f"{field}: {error}")
+        return redirect(url_for('get_review'))
+
+@app.route('/game_list/', methods=['GET'])
+def get_games():
+    return render_template("game_page")
+
+@app.route('/my_game_page/')
+def get_my_games():
+    return render_template("mygames_page.html")
+
+@app.route('/friends_page/')
+def get_friends():
+    return render_template("friends_page.html")
+
+@app.route('/calendarview/')
+def get_calendar():
+    return render_template("calendar_page.html")
+
+@app.route('/profile/')
+def get_profile():
+    return render_template("profile_page.html")
+
