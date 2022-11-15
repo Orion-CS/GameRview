@@ -137,15 +137,15 @@ def post_review():
             flash(f"{field}: {error}")
         return redirect(url_for('get_review'))
 
-@app.route('/game_list/', methods=['GET'])
+@app.route('/game/', methods=['GET'])
 def get_games():
     return render_template("game_page")
 
-@app.route('/my_game_page/')
+@app.route('/mygames/')
 def get_my_games():
     return render_template("mygames_page.html")
 
-@app.route('/friends_page/')
+@app.route('/friends/')
 def get_friends():
     return render_template("friends_page.html")
 
