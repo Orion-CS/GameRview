@@ -91,6 +91,11 @@ with app.app_context():
 # === Routes ===
 @app.route('/')
 def index():
+    return redirect(url_for('home'))
+
+
+@app.route('/home/')
+def home():
     return render_template("home_page.html")
 
 
