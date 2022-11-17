@@ -104,10 +104,9 @@ def read_in_pepper():
 # === Set Up Database ===
 with app.app_context():
     # Create the database for this model
-    db.drop_all()
+    db.drop_all() # TODO: remove this once get all actual data
     db.create_all()
 
-    #db.session.add(Movie(title="The Fellowship of the Ring", year=2001, budget=93000000.0))
     db.session.add_all(read_in_games())
     db.session.add_all(read_in_users())
     db.session.commit()
