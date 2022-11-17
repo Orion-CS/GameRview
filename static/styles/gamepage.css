@@ -1,0 +1,35 @@
+#top-games-header {
+    margin-top: 60px;
+    margin-left: 80px;
+}
+
+#rating-header {
+    margin-top: 83px;
+    margin-left: 10px;
+}
+
+#synopsis {
+    top: 0;
+    left:0;
+    max-width: 700px;
+    height: 50px;
+}
+.game {
+    margin-top: 10px;
+    margin-left: 80px;
+    margin-bottom: 30px;
+    width: 300px;
+    height:400px;
+    box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.579);
+}
+
+.video {
+    margin-top: 10px;
+    margin-left: 80px;
+    box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.579);
+}
+
+#game-info {
+    margin-left:30px;
+    margin-top:10px;
+}
