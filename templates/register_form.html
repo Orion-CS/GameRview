@@ -4,9 +4,47 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles/navbar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+    crossorigin="anonymous">
     <title>Register</title>
 </head>
 <body>
+    <nav id="bar" class="navbar sticky-top navbar-expand-lg navbar-light">
+        <a id="main" class="navbar-brand" href="/home/">
+          <img src="\static\icons\logo.png" width="150" height="70" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon bg-secondary"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/home/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="#">Search <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/calendarview/">Calendar <span class="sr-only">(current)</span></a>
+            </li>
+            {% if user %}
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/friends/">Friends <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
+            </li>
+            {% endif %}
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/profile/">Profile <span class="sr-only">(current)</span></a>
+            </li>
+          </ul>
+  
+        </div>
+      </nav>
+
     <h1>Register</h1>
 
     {% for message in get_flashed_messages() %}
