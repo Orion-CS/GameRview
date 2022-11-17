@@ -89,13 +89,19 @@ def read_in_users():
 
 # endregion
 
-# def write_out_pepper(pepper_out):
-#     pass
+def write_out_pepper(pepper_out):
+    print("pepper_out:", pepper_out)
+    pepper_file = open("pepper.txt", "w")
+    pepper_file.write(pepper_out.decode('utf-8'))
+    pepper_file.flush()
+    pepper_file.close()
 
 
-# def read_in_pepper():
-#     my_pepper = 0
-#     return my_pepper
+def read_in_pepper():
+    pepper_file = open("pepper.txt", "r")
+    my_pepper = pepper_file.readline()
+    pepper_file.close()
+    return my_pepper
 
 
 # === Set Up Database ===
@@ -110,10 +116,12 @@ with app.app_context():
     db.session.commit()
 
 
-# # === Hashing ===
-# #pepper = Hasher.random_pepper()
-# pepper = read_in_pepper()
-# hasher = Hasher(bytes(pepper))
+# === Hashing ===
+#pepper_out = Hasher.random_pepper()
+#write_out_pepper(pepper_out=pepper_out)
+pepper = read_in_pepper()
+#print("pepper", pepper)
+hasher = Hasher(bytes(pepper, encoding='utf-8'))
 
 
 # === Routes ===
