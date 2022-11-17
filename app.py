@@ -174,7 +174,7 @@ def post_review():
 
 @app.route('/game/', methods=['GET'])
 def get_games():
-    return render_template("game_page")
+    return render_template("game_page.html")
 
 @app.route('/mygames/')
 def get_my_games():
