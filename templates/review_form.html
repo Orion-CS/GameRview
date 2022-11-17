@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://kit.fontawesome.com/a222c8e425.js" crossorigin="anonymous"></script>
+    <script src="scripts/rating.js"></script>
+    <title>Review</title>
+</head>
+
+<body>
+    
+    <form class="test" action="/review/" method="post">
+        {{ form.hidden_tag() }}
+        <div class="bruh">
+            {{ form.review.label }}
+            {{ form.review() }}
+        </div>
+
+        <div>
+            {{ form.rating.label }}
+            {{ form.rating() }}
+        </div>
+
+        <div role="slider" aria-valuemin="0" aria-valuemax="10" aria-valuenow="1">
+            <i class="fa-regular fa-star" id="star1" type="button"></i>
+            <i class="fa-regular fa-star" id="star2" type="button"></i>
+            <i class="fa-regular fa-star" id="star3" type="button"></i>
+            <i class="fa-regular fa-star" id="star4" type="button"></i>
+            <i class="fa-regular fa-star" id="star5" type="button"></i>
+        </div>
+
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+    
+</body>
+</html>
