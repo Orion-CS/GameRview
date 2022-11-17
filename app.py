@@ -67,10 +67,10 @@ class User(db.Model):
 
 # region Helper Methods
 
-def read_in_movies():
-    all_movies = []
-    # read in movies
-    return all_movies
+def read_in_games():
+    all_games = []
+    # read in games
+    return all_games
 
 
 def read_in_users():
@@ -102,7 +102,7 @@ with app.app_context():
     db.create_all()
 
     #db.session.add(Movie(title="The Fellowship of the Ring", year=2001, budget=93000000.0))
-    db.session.add_all(read_in_movies())
+    db.session.add_all(read_in_games())
     db.session.add_all(read_in_users())
     db.session.commit()
 
@@ -143,12 +143,15 @@ def post_register():
         for user in users:
             if user.username == form.username.data or user.email == form.email.data:
                 # error not flashing 
-                flash(f"Username or email already taken")
+                flash("Username or email already taken")
                 return redirect(url_for('get_register'))
 
         # hash password
         pwd_hash = hasher.hash(form.password.data)
-        db.session.add(User(username=form.username.data, email=form.email.data, pwd_hash=pwd_hash))
+        userVar = User(username=form.username.data, email=form.email.data, pwd_hash=pwd_hash)
+        #global current_user
+        #current_user = userVar
+        db.session.add(userVar)
         db.session.commit()
         return redirect(url_for('get_profile'))
     else:
@@ -190,26 +193,30 @@ def get_calendar():
 
 @app.route('/profile/')
 def get_profile():
+    print(current_user != None)
     if current_user:
         return render_template("profile_page.html")
+    return redirect(url_for('get_login'))
+
+@app.route('/login/', methods=['GET'])
+def get_login():
     return render_template("login_page.html", form=LoginForm())
 
-@app.route('/profile/', methods=['POST'])
+@app.route('/login/', methods=['POST'])
 def post_login():
     form = LoginForm()
     if form.validate():
-        # not done yet
         users = User.query.all()
-        form_pwd_hash = hasher.hash(form.password.data)
         for user in users:
-            user_pwd_hash = user.pwd_hash
-            if user.email == form.email.data and form_pwd_hash == user_pwd_hash:
+            passEqual = hasher.check(pwd=form.password.data, pep_hash=user.pwd_hash)
+            if user.email == form.email.data and passEqual:
                 # valid login
-                print("yayyy")
+                global current_user
+                current_user = user
                 return redirect(url_for('get_profile'))
-        flash(f"Invalid login")
-        return redirect(url_for('get_profile'))
+        flash("Invalid login")
+        return redirect(url_for('get_login'))
     else:
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
-        return redirect(url_for('get_profile'))
+        return redirect(url_for('get_login'))
