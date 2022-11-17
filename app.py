@@ -42,6 +42,7 @@ class VideoGame(db.Model):
     title = db.Column(db.Unicode, nullable=False)
     year = db.Column(db.Integer, nullable=False)
     studio = db.Column(db.Unicode, nullable=False)
+    image = db.Column(db.Unicode, nullable=False)
 
 
 class User(db.Model):
@@ -69,6 +70,11 @@ class User(db.Model):
 
 def read_in_games():
     all_games = []
+    vg1 = VideoGame(title="Suber Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
+    vg2 = VideoGame(title="Suber Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
+    vg3 = VideoGame(title="Suber Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
+    vg4 = VideoGame(title="Suber Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
+    all_games.extend([vg1, vg2, vg3, vg4])
     # read in games
     return all_games
 
@@ -126,7 +132,11 @@ def index():
 
 @app.route('/home/')
 def home():
-    return render_template("home_page.html", user=current_user)
+    all_games = VideoGame.query.all()
+
+    # TODO:get the favorite games
+    favorite_games = all_games
+    return render_template("home_page.html", user=current_user, favorite_games=favorite_games)
 
 
 @app.route('/register/', methods=["GET"])
