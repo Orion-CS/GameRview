@@ -43,6 +43,8 @@ class VideoGame(db.Model):
     year = db.Column(db.Integer, nullable=False)
     studio = db.Column(db.Unicode, nullable=False)
     image = db.Column(db.Unicode, nullable=False)
+    description = db.Column(db.Unicode, nullable=True)
+    trailerLink = db.Column(db.Unicode, nullable=True)
 
 
 class User(db.Model):
