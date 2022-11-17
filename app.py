@@ -167,6 +167,7 @@ def post_review():
     if form.validate():
         return redirect(url_for('get_review'))
     else:
+        print("bruh")
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
         return redirect(url_for('get_review'))
@@ -204,7 +205,7 @@ def post_login():
             user_pwd_hash = user.pwd_hash
             if user.email == form.email.data and form_pwd_hash == user_pwd_hash:
                 # valid login
-                current_user = user
+                print("yayyy")
                 return redirect(url_for('get_profile'))
         flash(f"Invalid login")
         return redirect(url_for('get_profile'))
