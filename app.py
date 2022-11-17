@@ -151,12 +151,11 @@ def post_register():
                 # error not flashing 
                 flash(f"Username or email already taken.")
                 return redirect(url_for('get_register'))
-        user = User(username = form.username.data, email = form.email.data, pwd_hash = form.password.data)
-        db.session.add(user)
+
+        # hash password
+        pwd_hash = hasher.hash(form.password.data)
+        db.session.add(User(username=form.username.data, email=form.email.data, pwd_hash=pwd_hash))
         db.session.commit()
-        #pwd_hash = hasher.hash(password)
-        #db.session.add(User(username=username, email=email, pwd_hash=pwd_hash))
-        #db.session.commit()
         return redirect(url_for('get_register'))
     else:
         for field, error in form.errors.items():
@@ -199,3 +198,14 @@ def get_profile():
     if current_user.is_authenticated:
         return render_template("profile_page.html")
     return render_template("login_page.html", form=LoginForm())
+
+@app.route('/profile/', methods=['POST'])
+def post_login():
+    form = LoginForm()
+    if form.validate():
+        # not done yet
+        return redirect(url_for('get_profile'))
+    else:
+        for field, error in form.errors.items():
+            flash(f"{field}: {error}")
+        return redirect(url_for('get_profile'))
