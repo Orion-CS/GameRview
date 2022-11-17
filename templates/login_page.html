@@ -9,6 +9,28 @@
     <!--<link rel="stylesheet" href="/static/styles/worldcup.css">-->
   </head>
   <body>
+    <h1>Login</h1>
+    <form action="/login/" method="post">
+      {# add CSRF protection #} 
+      {{ form.hidden_tag() }}
+
+      <div>
+      {# add email field and label #}
+      {{ form.email.label }}
+      {{ form.email() }}
+      </div>
+
+      <div>
+      {# add password fields and labels #} 
+      {{ form.password.label }}
+      {{ form.password() }}
+      </div>
+
+      <div>
+      {# add submit button #}
+      {{ form.submit() }}
+      </div>
+  </form>
 
   </body>
 </html>

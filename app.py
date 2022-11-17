@@ -1,13 +1,16 @@
+
 # GameRview Semester Project
 # R. Todd Pinsenschaum II, Andy Beichner, Amy Cunningham, Zach Goniea
 
 from flask import Flask, request, render_template, redirect, url_for, abort, session
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, current_user, UserMixin
 
 # === Forms ===
 from registerForm import RegisterForm
 from reviewForm import ReviewForm
+from loginForm import LoginForm
 
 # === Hasher ===
 from hasher import Hasher
@@ -31,6 +34,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Connect app to SQLite database
 db = SQLAlchemy(app)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login_page.html'
+
+@login_manager.user_loader
+def load_user(uid):
+    return User.query.get(int(uid))
+
+# region Database Models
+
 # === Database Models ===
 class VideoGame(db.Model):
     __tablename__ = 'Video Games'
@@ -40,15 +53,29 @@ class VideoGame(db.Model):
     studio = db.Column(db.Unicode, nullable=False)
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Unicode, nullable=False)
     email = db.Column(db.Unicode, nullable=False)
     pwd_hash = db.Column(db.Unicode, nullable=False)
 
+    def is_authenticated(self):
+        return True
 
-# === Helper Methods ===
+    def is_active(self):   
+        return True           
+
+    def is_anonymous(self):
+        return False          
+
+    def get_id(self):         
+        return str(self.id)
+
+# endregion
+
+# region Helper Methods
+
 def read_in_movies():
     all_movies = []
     # read in movies
@@ -60,6 +87,7 @@ def read_in_users():
     # read in users
     return all_users
 
+# endregion
 
 # def write_out_pepper(pepper_out):
 #     pass
@@ -160,5 +188,6 @@ def get_calendar():
 
 @app.route('/profile/')
 def get_profile():
-    return render_template("profile_page.html")
-
+    if current_user.is_authenticated:
+        return render_template("profile_page.html")
+    return render_template("login_page.html", form=LoginForm())
