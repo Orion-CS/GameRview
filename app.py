@@ -5,7 +5,6 @@
 from flask import Flask, request, render_template, redirect, url_for, abort, session
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, current_user, UserMixin
 
 # === Forms ===
 from registerForm import RegisterForm
@@ -34,14 +33,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Connect app to SQLite database
 db = SQLAlchemy(app)
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login_page.html'
-
-@login_manager.user_loader
-def load_user(uid):
-    return User.query.get(int(uid))
-
 # region Database Models
 
 # === Database Models ===
@@ -53,7 +44,7 @@ class VideoGame(db.Model):
     studio = db.Column(db.Unicode, nullable=False)
 
 
-class User(UserMixin, db.Model):
+class User(db.Model):
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Unicode, nullable=False)
@@ -123,6 +114,9 @@ pepper = read_in_pepper()
 #print("pepper", pepper)
 hasher = Hasher(bytes(pepper, encoding='utf-8'))
 
+# === User ===
+current_user = None
+
 
 # === Routes ===
 @app.route('/')
@@ -132,7 +126,7 @@ def index():
 
 @app.route('/home/')
 def home():
-    return render_template("home_page.html")
+    return render_template("home_page.html", user=current_user)
 
 
 @app.route('/register/', methods=["GET"])
@@ -149,14 +143,14 @@ def post_register():
         for user in users:
             if user.username == form.username.data or user.email == form.email.data:
                 # error not flashing 
-                flash(f"Username or email already taken.")
+                flash(f"Username or email already taken")
                 return redirect(url_for('get_register'))
 
         # hash password
         pwd_hash = hasher.hash(form.password.data)
         db.session.add(User(username=form.username.data, email=form.email.data, pwd_hash=pwd_hash))
         db.session.commit()
-        return redirect(url_for('get_register'))
+        return redirect(url_for('get_profile'))
     else:
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
@@ -195,7 +189,7 @@ def get_calendar():
 
 @app.route('/profile/')
 def get_profile():
-    if current_user.is_authenticated:
+    if current_user:
         return render_template("profile_page.html")
     return render_template("login_page.html", form=LoginForm())
 
@@ -204,6 +198,15 @@ def post_login():
     form = LoginForm()
     if form.validate():
         # not done yet
+        users = User.query.all()
+        form_pwd_hash = hasher.hash(form.password.data)
+        for user in users:
+            user_pwd_hash = user.pwd_hash
+            if user.email == form.email.data and form_pwd_hash == user_pwd_hash:
+                # valid login
+                current_user = user
+                return redirect(url_for('get_profile'))
+        flash(f"Invalid login")
         return redirect(url_for('get_profile'))
     else:
         for field, error in form.errors.items():
