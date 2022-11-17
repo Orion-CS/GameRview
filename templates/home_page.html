@@ -17,38 +17,38 @@
 
   <body>
     <nav id="bar" class="navbar sticky-top navbar-expand-lg navbar-light">
-      <a id="main" class="navbar-brand" href="#">
+      <a id="main" class="navbar-brand" href="/home/">
         <img src="\static\icons\logo.png" width="150" height="70" alt=""></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon bg-secondary"></span>
       </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link text-warning" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link text-warning" href="#">Search <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link text-warning" href="/calendarview/">Calendar <span class="sr-only">(current)</span></a>
-        </li>
-        {% if user %}
-        <li class="nav-item active">
-          <a class="nav-link text-warning" href="/friends/">Friends <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
-        </li>
-        {% endif %}
-        <li class="nav-item active">
-          <a class="nav-link text-warning" href="/profile/">Profile <span class="sr-only">(current)</span></a>
-        </li>
-      </ul>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link text-warning" href="/home/">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link text-warning" href="#">Search <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link text-warning" href="/calendarview/">Calendar <span class="sr-only">(current)</span></a>
+          </li>
+          {% if user %}
+          <li class="nav-item active">
+            <a class="nav-link text-warning" href="/friends/">Friends <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
+          </li>
+          {% endif %}
+          <li class="nav-item active">
+            <a class="nav-link text-warning" href="/profile/">Profile <span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
 
-    </div>
-  </nav>
+      </div>
+    </nav>
 
   </div>
     <h1 id="top-games-header">Top Games</h1>

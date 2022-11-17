@@ -132,7 +132,7 @@ def home():
 @app.route('/register/', methods=["GET"])
 def get_register():
     form = RegisterForm()
-    return render_template("register_form.html", form=form)
+    return render_template("register_form.html", user=current_user, form=form)
 
 
 @app.route('/register/', methods=["POST"])
@@ -162,7 +162,7 @@ def post_register():
 @app.route('/review/', methods=['GET'])
 def get_review():
     form = ReviewForm()
-    return render_template("review_form.html", form=form)
+    return render_template("review_form.html", user=current_user, form=form)
 
 @app.route('/review/', methods=['POST'])
 def post_review():
@@ -177,30 +177,30 @@ def post_review():
 
 @app.route('/game/', methods=['GET'])
 def get_games():
-    return render_template("game_page.html")
+    return render_template("game_page.html", user=current_user)
 
 @app.route('/mygames/')
 def get_my_games():
-    return render_template("mygames_page.html")
+    return render_template("mygames_page.html", user=current_user)
 
 @app.route('/friends/')
 def get_friends():
-    return render_template("friends_page.html")
+    return render_template("friends_page.html", user=current_user)
 
 @app.route('/calendarview/')
 def get_calendar():
-    return render_template("calendar_page.html")
+    return render_template("calendar_page.html", user=current_user)
 
 @app.route('/profile/')
 def get_profile():
     print(current_user != None)
     if current_user:
-        return render_template("profile_page.html")
+        return render_template("profile_page.html", user=current_user)
     return redirect(url_for('get_login'))
 
 @app.route('/login/', methods=['GET'])
 def get_login():
-    return render_template("login_page.html", form=LoginForm())
+    return render_template("login_page.html", user=current_user, form=LoginForm())
 
 @app.route('/login/', methods=['POST'])
 def post_login():
