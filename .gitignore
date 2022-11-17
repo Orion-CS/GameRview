@@ -106,6 +106,9 @@ celerybeat.pid
 # Environments
 .env
 .venv
+
+*.sqlite3
+
 env/
 venv/
 ENV/
