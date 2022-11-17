@@ -3,13 +3,16 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/static/styles/loginpage.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+    crossorigin="anonymous">
     <title>Login</title>
 
     <!--<link rel="stylesheet" href="/static/styles/worldcup.css">-->
   </head>
   <body>
-    <h1>Login</h1>
     <form action="/login/" method="post">
       {# add CSRF protection #} 
       {{ form.hidden_tag() }}
@@ -28,9 +31,12 @@
 
       <div>
       {# add submit button #}
-      {{ form.submit() }}
+      <a class="btn btn-primary" href="{{ form.submit() }}" role="button">Submit</a>
+      
       </div>
   </form>
-
+  <div>
+    <a class="btn btn-primary" href="{{ url_for('get_register') }}" role="button">Don't have an account?</a>
+  </div>
   </body>
 </html>
