@@ -72,10 +72,10 @@ class User(db.Model):
 
 def read_in_games():
     all_games = []
-    vg1 = VideoGame(title="Suber Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
-    vg2 = VideoGame(title="Suber Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
-    vg3 = VideoGame(title="Suber Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
-    vg4 = VideoGame(title="Suber Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
+    vg1 = VideoGame(title="Super Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
+    vg2 = VideoGame(title="Super Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
+    vg3 = VideoGame(title="Super Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
+    vg4 = VideoGame(title="Super Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
     all_games.extend([vg1, vg2, vg3, vg4])
     # read in games
     return all_games
