@@ -220,7 +220,7 @@ def post_login():
         users = User.query.all()
         for user in users:
             passEqual = hasher.check(pwd=form.password.data, pep_hash=user.pwd_hash)
-            if user.email == form.email.data and passEqual:
+            if user.email == form.credentials.data  or user.username == form.credentials.data and passEqual:
                 # valid login
                 global current_user
                 current_user = user
