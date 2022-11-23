@@ -9,19 +9,25 @@
 
 .nav-item {
   margin-left: 40px;
-
 }
 .nav-link{
   color: rgb(237,217,73);
   text-align: center;
   background-color: rgba(88, 95, 99, 0);
   border-radius: 10px;
+  margin: .5rem;
   border: 2px solid  rgb(57, 56, 58);
 }
 
 .navbar-toggler-icon{
   border-radius: 5px;
   border: 2px solid  rgb(57, 56, 58);
+}
+
+#search.nav-item {
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 1.5rem;
 }
 
 
