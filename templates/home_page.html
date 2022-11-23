@@ -54,7 +54,7 @@
     <div class="row">
 
         {% for game in favorite_games %}
-          <a href="{{ url_for('get_games') }}">
+          <a href="/game/{{game.id}}">
             <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
             <div class="info fade slide-up"> {{game.title}} </div>
           </a>

@@ -192,9 +192,10 @@ def post_review():
             flash(f"{field}: {error}")
         return redirect(url_for('get_review'))
 
-@app.route('/game/', methods=['GET'])
-def get_games():
-    return render_template("game_page.html", user=current_user)
+@app.route('/game/<int:gId>/', methods=['GET'])
+def get_game(gId):
+    game = VideoGame.query.get_or_404(gId)
+    return render_template("game_page.html", user=current_user, game=game)
 
 @app.route('/mygames/')
 def get_my_games():
