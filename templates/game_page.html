@@ -51,34 +51,32 @@
 
   </div>
     <div class="row">
-      <h1 id="top-games-header">Super Mario Bros 3</h1> <h6 id="rating-header">4/5</h6>
+      <h1 id="top-games-header">{{game.title}}</h1> 
+      {% if game.rating %}
+        <h6 id="rating-header">{{game.rating}}</h6>
+      {% endif %}
     </div>
     <div class="row">
-      <img class="game" src="\static\icons\marioFiller.png" id ="first-game" alt=""/>
+      <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt=""/>
       <div class="column" id="game-info">
         <div>
-          <h4>Released 10/23/88</h4>
+          <h4>Released {{game.releaseDate}}</h4>
         </div>
         <div>
-          <h4>Created by Nintendo</h4>
+          <h4>Created by {{game.studio}}</h4>
         </div>
         <div>
-          <h6 id="synopsis">Peace has returned to the Mushroom Kingdom thanks to the efforts of Mario and Luigi; however, Bowser sent his own seven 
-            children (Larry, Morton, Wendy, Iggy, Roy, Lemmy, and Ludwig) to the other countries of the Mushroom World. The Mushroom 
-            Kingdom forms a gateway to these lands, and the Koopalings have stolen the respective royal magic wands of the seven kings, 
-            using them to transform the kings into various helpless creatures. Mario and Luigi vow to go and stop the Koopalings' mischief, 
-            and change the kings back into their normal form. At the end of each world, Mario and Luigi fight one of the Koopalings, and 
-            after the match is over, retrieve the wand from the Koopaling to turn the king back to normal. While the brothers are out 
-            in their adventure, Bowser kidnaps Princess Toadstool and takes her to his lair in Dark Land. The brothers go to Dark Land 
-            and fight Bowser. After defeating Bowser, they save the princess and restore peace once again.
+          <h6 id="synopsis">{{game.description}}
           </h6>
         </div>
       </div>
     </div>
-    <div>
-      <iframe class="video" width="420" height="315"
-      src="https://www.youtube.com/embed/92bgHaM3B5A"></iframe>
-    </div>
+    {% if game.trailerLink %}
+      <div>
+        <iframe class="video" width="420" height="315"
+        src={{game.trailerLink}}></iframe>
+      </div>
+    {% endif %}
     
   <div>
 

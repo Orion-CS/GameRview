@@ -6,6 +6,9 @@ from flask import Flask, request, render_template, redirect, url_for, abort, ses
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
 
+# === Temp Data ===
+from tempdata import mario_description
+
 # === Forms ===
 from registerForm import RegisterForm
 from reviewForm import ReviewForm
@@ -40,11 +43,12 @@ class VideoGame(db.Model):
     __tablename__ = 'Video Games'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode, nullable=False)
-    year = db.Column(db.Integer, nullable=False)
+    releaseDate = db.Column(db.Unicode, nullable=False)
     studio = db.Column(db.Unicode, nullable=False)
     image = db.Column(db.Unicode, nullable=False)
-    description = db.Column(db.Unicode, nullable=True)
+    description = db.Column(db.Unicode, nullable=False)
     trailerLink = db.Column(db.Unicode, nullable=True)
+    rating = db.Column(db.Unicode, nullable=True)
 
 
 class User(db.Model):
@@ -54,23 +58,14 @@ class User(db.Model):
     email = db.Column(db.Unicode, nullable=False)
     pwd_hash = db.Column(db.Unicode, nullable=False)
 
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):   
-        return True           
-
-    def is_anonymous(self):
-        return False          
-
     def get_id(self):         
         return str(self.id)
 
 class Friendship(db.Model):
     __tablename__ = 'Friendships'
     id = db.Column(db.Integer, primary_key=True)
-    userId = db.Column(db.Unicode, nullable=False)
-    friendId = db.Column(db.Unicode, nullable=False)
+    userId = db.Column(db.Unicode, db.ForeignKey('Users.id'), nullable=False)
+    friendId = db.Column(db.Unicode, db.ForeignKey('Users.id'), nullable=False)
 
 # endregion
 
@@ -78,10 +73,10 @@ class Friendship(db.Model):
 
 def read_in_games():
     all_games = []
-    vg1 = VideoGame(title="Super Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
-    vg2 = VideoGame(title="Super Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
-    vg3 = VideoGame(title="Super Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
-    vg4 = VideoGame(title="Super Mario Bros 3", year=1988, studio="Nintendo", image="marioFiller.png")
+    vg1 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating="4/5")
+    vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
+    vg3 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, rating="4/5")
+    vg4 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
     all_games.extend([vg1, vg2, vg3, vg4])
     # read in games
     return all_games
