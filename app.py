@@ -66,6 +66,12 @@ class User(db.Model):
     def get_id(self):         
         return str(self.id)
 
+class Friendship(db.Model):
+    __tablename__ = 'Friendships'
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Unicode, nullable=False)
+    friendId = db.Column(db.Unicode, nullable=False)
+
 # endregion
 
 # region Helper Methods
@@ -192,11 +198,20 @@ def get_games():
 
 @app.route('/mygames/')
 def get_my_games():
-    return render_template("mygames_page.html", user=current_user)
+    if current_user:
+        return render_template("mygames_page.html", user=current_user)
+    return redirect(url_for('get_login'))   
 
 @app.route('/friends/')
 def get_friends():
-    return render_template("friends_page.html", user=current_user)
+    if current_user:
+        friendList = []
+        friendIds = Friendship.query.filter_by(userId=current_user.id).all()
+        for fId in friendIds:
+            user = User.query.filter_by(id=fId).all()
+            friendList.append(user)
+        return render_template("friends_page.html", user=current_user, friendList=friendList)
+    return redirect(url_for('get_login'))
 
 @app.route('/calendarview/')
 def get_calendar():
@@ -204,7 +219,6 @@ def get_calendar():
 
 @app.route('/profile/')
 def get_profile():
-    print(current_user != None)
     if current_user:
         return render_template("profile_page.html", user=current_user)
     return redirect(url_for('get_login'))
