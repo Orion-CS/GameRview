@@ -40,7 +40,7 @@ db = SQLAlchemy(app)
 
 # === Database Models ===
 class VideoGame(db.Model):
-    __tablename__ = 'Video Games'
+    __tablename__ = 'VideoGames'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode, nullable=False)
     releaseDate = db.Column(db.Unicode, nullable=False)
@@ -67,17 +67,22 @@ class Friendship(db.Model):
     userId = db.Column(db.Unicode, db.ForeignKey('Users.id'), nullable=False)
     friendId = db.Column(db.Unicode, db.ForeignKey('Users.id'), nullable=False)
 
+class FavoritedGame(db.Model):
+    __tablename__ = 'FavoritedGames'
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Unicode, db.ForeignKey('Users.id'), nullable=False)
+    gameId = db.Column(db.Unicode, db.ForeignKey('VideoGames.id'), nullable=False)
+
 # endregion
 
 # region Helper Methods
 
 def read_in_games():
-    all_games = []
     vg1 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating="4/5")
     vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
     vg3 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, rating="4/5")
     vg4 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
-    all_games.extend([vg1, vg2, vg3, vg4])
+    all_games = [vg1, vg2, vg3, vg4]
     # read in games
     return all_games
 
@@ -195,7 +200,12 @@ def get_game(gId):
 @app.route('/mygames/')
 def get_my_games():
     if current_user:
-        return render_template("mygames_page.html", user=current_user)
+        gameList = []
+        gameIds = FavoritedGame.query.filter_by(userId=current_user.id).all()
+        for gId in gameIds:
+            game = VideoGame.query.filter_by(id=gId).all()
+            gameList.append(game)
+        return render_template("mygames_page.html", user=current_user, gameList=gameList)
     return redirect(url_for('get_login'))   
 
 @app.route('/friends/')
