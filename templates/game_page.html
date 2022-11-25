@@ -78,6 +78,25 @@
       </div>
     {% endif %}
     
+    <div>
+      <div class="row">
+        <h3 id="reviews-header">Reviews</h3>
+        {% if user %}
+          <a id="add-review" class="btn btn-primary" href="/review/{{game.id}}" role="button">Add Review</a>
+        {% endif %}
+      </div>
+      {% if reviewTups %}
+        {% for r in reviewTups %}
+          <div>
+            <h5 id="review-text">{{r[0].text}}</h5>
+            <div class="row">
+              <h6 id="review-username">{{r[1].username}}</h6>
+              <h6 id="review-rating">{{r[0].rating}}</h6>
+            </div>
+          </div>
+        {% endfor %}
+      {%endif%}
+    </div>
   <div>
 
   </body>

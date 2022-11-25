@@ -33,3 +33,28 @@
     margin-left:30px;
     margin-top:10px;
 }
+
+#reviews-header {
+    margin-top: 60px;
+    margin-left: 80px;
+}
+
+#add-review {
+    margin-top: 60px;
+    margin-left: 40px;
+}
+
+#review-text {
+    margin-top: 10px;
+    margin-left: 100px;
+}
+
+#review-username {
+    margin-top: 5px;
+    margin-left: 150px;
+}
+
+#review-rating {
+    margin-top: 5px;
+    margin-left: 40px;
+}

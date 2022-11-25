@@ -24,7 +24,7 @@ script_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(script_dir)
 
 # Identifying the Database File
-dbfile = os.path.join(script_dir, "gamerview.sqlite3")
+dbfile = os.path.join(script_dir + "\database", "gamerview.sqlite3")
 
 # Defining the Flask App
 app = Flask(__name__)
@@ -50,7 +50,6 @@ class VideoGame(db.Model):
     trailerLink = db.Column(db.Unicode, nullable=True)
     rating = db.Column(db.Unicode, nullable=True)
 
-
 class User(db.Model):
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
@@ -70,6 +69,14 @@ class Friendship(db.Model):
 class FavoritedGame(db.Model):
     __tablename__ = 'FavoritedGames'
     id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Unicode, db.ForeignKey('Users.id'), nullable=False)
+    gameId = db.Column(db.Unicode, db.ForeignKey('VideoGames.id'), nullable=False)
+
+class Review(db.Model):
+    __tablename__ = 'Reviews'
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Unicode, nullable=False)
+    rating = db.Column(db.Unicode, nullable=False)
     userId = db.Column(db.Unicode, db.ForeignKey('Users.id'), nullable=False)
     gameId = db.Column(db.Unicode, db.ForeignKey('VideoGames.id'), nullable=False)
 
@@ -176,16 +183,22 @@ def post_register():
             flash(f"{field}: {error}")
         return redirect(url_for('get_register'))
 
-@app.route('/review/', methods=['GET'])
-def get_review():
+@app.route('/review/<int:gId>/', methods=['GET'])
+def get_review(gId):
     form = ReviewForm()
-    return render_template("review_form.html", user=current_user, form=form)
+    return render_template("review_form.html", user=current_user, form=form, gId=gId)
 
-@app.route('/review/', methods=['POST'])
-def post_review():
+@app.route('/review/<int:gId>/', methods=['POST'])
+def post_review(gId):
     form = ReviewForm()
     if form.validate():
-        return redirect(url_for('get_review'))
+        # add the review to table
+        text = form.review.data if form.review else ""
+        rating = f"{form.rating.data}/5"
+        r = Review(text=text, rating=rating, userId=current_user.id, gameId=gId)
+        db.session.add(r)
+        db.session.commit()
+        return redirect(f"/game/{gId}")
     else:
         print("bruh")
         for field, error in form.errors.items():
@@ -195,7 +208,12 @@ def post_review():
 @app.route('/game/<int:gId>/', methods=['GET'])
 def get_game(gId):
     game = VideoGame.query.get_or_404(gId)
-    return render_template("game_page.html", user=current_user, game=game)
+    reviews = Review.query.filter_by(gameId=game.id).all()
+    reviewTups = []
+    for review in reviews:
+        user = User.query.filter_by(id=review.userId).all()[0]
+        reviewTups.append((review, user))
+    return render_template("game_page.html", user=current_user, game=game, reviewTups=reviewTups)
 
 @app.route('/mygames/')
 def get_my_games():
