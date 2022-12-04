@@ -17,6 +17,11 @@ from loginForm import LoginForm
 # === Hasher ===
 from hasher import Hasher
 
+# === Login ===
+from flask_login import UserMixin, current_user, login_user
+from flask_login import LoginManager
+login_manager = LoginManager()
+
 # make sure the script's directory is in Python's import path
 # this is only required when run from a different directory
 import os, sys
@@ -36,6 +41,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Connect app to SQLite database
 db = SQLAlchemy(app)
 
+# Setup login
+login_manager.init_app(app)
+
 # region Database Models
 
 # === Database Models ===
@@ -50,12 +58,19 @@ class VideoGame(db.Model):
     trailerLink = db.Column(db.Unicode, nullable=True)
     rating = db.Column(db.Unicode, nullable=True)
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Unicode, nullable=False)
     email = db.Column(db.Unicode, nullable=False)
     pwd_hash = db.Column(db.Unicode, nullable=False)
+
+    def get(id_str):
+        id_int = int(id_str)
+        try:
+            return User.query.filter_by(id=id_int).all()[0]
+        except:
+            return None
 
     def get_id(self):         
         return str(self.id)
@@ -135,7 +150,11 @@ pepper = read_in_pepper()
 hasher = Hasher(bytes(pepper, encoding='utf-8'))
 
 # === User ===
-current_user = None
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
+
+#current_user = None
 
 
 # === Routes ===
@@ -243,7 +262,7 @@ def get_calendar():
 
 @app.route('/profile/')
 def get_profile():
-    if current_user:
+    if current_user.is_authenticated:
         return render_template("profile_page.html", user=current_user)
     return redirect(url_for('get_login'))
 
@@ -260,8 +279,9 @@ def post_login():
             passEqual = hasher.check(pwd=form.password.data, pep_hash=user.pwd_hash)
             if user.email == form.credentials.data  or user.username == form.credentials.data and passEqual:
                 # valid login
-                global current_user
-                current_user = user
+                login_user(user)
+                #global current_user
+                #current_user = user
                 return redirect(url_for('get_profile'))
         flash("Invalid login")
         return redirect(url_for('get_login'))
