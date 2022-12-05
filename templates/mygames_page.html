@@ -51,7 +51,17 @@
         </ul>
     </nav>
 
-    <h1>My Games List</h1>
+    <div>
+      <h1 id="top-games-header">My Favorite Games</h1>
+      <div class="row">
+        {% for game in favorite_games %}
+          <a href="/game/{{game.id}}">
+            <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
+            <div class="info fade slide-up"> {{game.title}} </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
 
   </body>
 </html>

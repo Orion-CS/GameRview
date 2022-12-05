@@ -52,8 +52,7 @@
   </div>
     <h1 id="top-games-header">Top Games</h1>
     <div class="row">
-
-        {% for game in favorite_games %}
+        {% for game in top_games %}
           <a href="/game/{{game.id}}">
             <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
             <div class="info fade slide-up"> {{game.title}} </div>

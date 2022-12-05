@@ -167,9 +167,9 @@ def index():
 def home():
     all_games = VideoGame.query.all()
 
-    # TODO:get the favorite games
-    favorite_games = all_games
-    return render_template("home_page.html", user=current_user, favorite_games=favorite_games)
+    # TODO:get the top games
+    top_games = all_games
+    return render_template("home_page.html", user=current_user, top_games=top_games)
 
 
 @app.route('/register/', methods=["GET"])
@@ -236,18 +236,18 @@ def get_game(gId):
 
 @app.route('/mygames/')
 def get_my_games():
-    if current_user:
-        gameList = []
+    if current_user.is_authenticated:
+        favorite_games = []
         gameIds = FavoritedGame.query.filter_by(userId=current_user.id).all()
         for gId in gameIds:
             game = VideoGame.query.filter_by(id=gId).all()
-            gameList.append(game)
-        return render_template("mygames_page.html", user=current_user, gameList=gameList)
+            favorite_games.append(game)
+        return render_template("mygames_page.html", user=current_user, favorite_games=favorite_games)
     return redirect(url_for('get_login'))   
 
 @app.route('/friends/')
 def get_friends():
-    if current_user:
+    if current_user.is_authenticated:
         friendList = []
         friendIds = Friendship.query.filter_by(userId=current_user.id).all()
         for fId in friendIds:

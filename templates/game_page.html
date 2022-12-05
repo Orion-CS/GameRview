@@ -55,6 +55,9 @@
       {% if game.rating %}
         <h6 id="rating-header">{{game.rating}}</h6>
       {% endif %}
+      {% if current_user.is_authenticated %}
+
+      {% endif %}
     </div>
     <div class="row">
       <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt=""/>
@@ -66,17 +69,17 @@
           <h4>Created by {{game.studio}}</h4>
         </div>
         <div>
-          <h6 id="synopsis">{{game.description}}
-          </h6>
+          <h6 id="synopsis">{{game.description}}</h6>
         </div>
       </div>
+    
+      {% if game.trailerLink %}
+        <div>
+          <iframe class="video" width="420" height="315"
+          src={{game.trailerLink}}></iframe>
+        </div>
+      {% endif %}
     </div>
-    {% if game.trailerLink %}
-      <div>
-        <iframe class="video" width="420" height="315"
-        src={{game.trailerLink}}></iframe>
-      </div>
-    {% endif %}
     
     <div>
       <div class="row">
