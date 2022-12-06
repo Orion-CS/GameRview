@@ -1,6 +1,43 @@
 .bruh{
-    background-color: aqua;
+    color: black;
 }
 .test{
-    background: blue;
+    padding: 4rem;
+}
+
+.review{
+    border-color: black;
+    font-weight: 500;
+    color: gold;
+    -webkit-text-stroke-color: black;
+    -webkit-text-stroke-width: 1px;
+    font-size: 50px;
+    border-width: 2px;
+}
+.stars{
+    display: flex;
+    padding: 10px;
+}
+
+
+.stars img{
+    filter: grayscale();
+    cursor: pointer;
+    padding: 2px;
+}
+
+.stars:hover img{
+    filter: none;
+}
+
+.stars img:hover{
+    filter: none;
+}
+
+.stars img:hover ~ img{
+    filter: grayscale();
+}
+
+.stars img.active{
+    filter: none;
 }

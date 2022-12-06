@@ -4,6 +4,6 @@ from wtforms.validators import InputRequired, Length, Optional
 
 class ReviewForm(FlaskForm):
     rating = SelectField(validators=[InputRequired()], choices=[1, 2, 3, 4, 5])
-    review = TextAreaField("Review", validators=[Optional(), Length(0, 1024)])
-    submit = SubmitField("Post Review")
+    review = TextAreaField("Rview", validators=[Optional(), Length(0, 1024)])
+    submit = SubmitField("Post Rview")
     

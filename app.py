@@ -31,12 +31,14 @@ sys.path.append(script_dir)
 # Identifying the Database File
 dbfile = os.path.join(script_dir + "\database", "gamerview.sqlite3")
 
+
 # Defining the Flask App
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['SECRET_KEY'] = 'spiderweb'
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{dbfile}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 # Connect app to SQLite database
 db = SQLAlchemy(app)
