@@ -41,22 +41,26 @@
           <li class="nav-item active">
             <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
           </li>
-          {% endif %}
           <li class="nav-item active">
-            <button class="nav-link text-warning" id="profileBtn">Profile <span class="sr-only"></button>
-
-            <!--<a class="nav-link text-warning" href="/profile/">Profile <span class="sr-only">(current)</span></a>-->
+            <button class="nav-link text-warning" id="profileBtn">Profile <span class="sr-only">(current)</button>
           </li>
-          </div>
-          <div id="profileModal" class="modal">
-            <div class="modal-content">
-              <span class="close">yayyy</span>
-              <img id="profilepic" src="{{ user.profilePic }}" width="200" height="200">
-              <p>OPOOPOOPOOP</p>
-            </div>
-          </div>
+          {% endif %}
+          {% if not current_user.is_authenticated %}
+          <li class="nav-item active">
+            <a class="nav-link text-warning" href="/register/">Register <span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %}
         </ul>
+      </div>
+
     </nav>
+    <div id="profileModal" class="modal">
+      <div class="modal-content">            
+        <img id="profilepic" src="{{ user.profilePic }}" width="200" height="200">
+        <h2 id="username">{{ user.username }}</h2>
+        <span class="close">Close</span>
+      </div>
+    </div>
 
   </div>
     <h1 id="top-games-header">Top Games</h1>
@@ -70,5 +74,6 @@
     </div>
   <script src="/static/scripts/profileModal.js"></script>
   <link rel="stylesheet" href="/static/styles/profilemodal.css">
+
   </body>
 </html>

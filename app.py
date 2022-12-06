@@ -202,7 +202,7 @@ def post_register():
         #current_user = userVar
         db.session.add(userVar)
         db.session.commit()
-        return redirect(url_for('get_profile'))
+        return redirect(url_for('home'))
     else:
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
@@ -264,12 +264,6 @@ def get_friends():
 @app.route('/calendarview/')
 def get_calendar():
     return render_template("calendar_page.html", user=current_user)
-
-@app.route('/profile/')
-def get_profile():
-    if current_user.is_authenticated:
-        return render_template("profile_page.html", user=current_user)
-    return redirect(url_for('get_login'))
 
 @app.route('/login/', methods=['GET'])
 def get_login():
