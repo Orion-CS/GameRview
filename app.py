@@ -202,6 +202,7 @@ def post_register():
         #current_user = userVar
         db.session.add(userVar)
         db.session.commit()
+        login_user(userVar)
         return redirect(url_for('home'))
     else:
         for field, error in form.errors.items():
@@ -281,7 +282,7 @@ def post_login():
                 login_user(user)
                 #global current_user
                 #current_user = user
-                return redirect(url_for('get_profile'))
+                return redirect(url_for('home'))
         flash("Invalid login")
         return redirect(url_for('get_login'))
     else:
