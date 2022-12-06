@@ -63,6 +63,7 @@ class VideoGame(db.Model):
 class User(UserMixin, db.Model):
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
+    profilePic = db.Column(db.Unicode, nullable=False)
     username = db.Column(db.Unicode, nullable=False)
     email = db.Column(db.Unicode, nullable=False)
     pwd_hash = db.Column(db.Unicode, nullable=False)
@@ -193,7 +194,10 @@ def post_register():
 
         # hash password
         pwd_hash = hasher.hash(form.password.data)
-        userVar = User(username=form.username.data, email=form.email.data, pwd_hash=pwd_hash)
+        userVar = User(profilePic='\static\icons\default-profile-pic.png', 
+            username=form.username.data, 
+            email=form.email.data, 
+            pwd_hash=pwd_hash)
         #global current_user
         #current_user = userVar
         db.session.add(userVar)
@@ -221,7 +225,6 @@ def post_review(gId):
         db.session.commit()
         return redirect(f"/game/{gId}")
     else:
-        print("bruh")
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
         return redirect(url_for('get_review'))
