@@ -33,7 +33,7 @@
       </div>
     </nav>
 
-    <h1>Login</h1>
+    <span class="h1 centered">Login</span>
 
     {% for message in get_flashed_messages() %}
 		<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -43,29 +43,40 @@
 		{% endfor %}
 
     <form action="/login/" method="post">
-      {# add CSRF protection #} 
-      {{ form.hidden_tag() }}
+      <div class="form-horizontal">
+        <div class="row">
+            {# add CSRF protection #} 
+            {{ form.hidden_tag() }}
 
-      <div>
-      {# add credentials field and label #}
-      {{ form.credentials.label }}
-      {{ form.credentials() }}
-      </div>
+            <div class="input-group centered">
+              <div class="mb-1 w-50 mt-3">
+              {# add credentials field and label #}
+              <span class="input-group-btn centered">
+                <button class="btn btn-default btn-dark text-warning font-weight-bold" type="button">{{ form.credentials.label }}</button>
+              </span>
+              {{ form.credentials(class="form-control border border-dark") }}
+              </div>
+            </div>
+            
+            <div class="input-group centered">
+              <div class="mb-1 w-50 mt-1">
+              {# add password fields and labels #}
+              <span class="input-group-btn centered">
+                <button class="btn btn-default btn-dark text-warning font-weight-bold" type="button">{{ form.password.label }}</button>
+              </span>
+              {{ form.password(class="form-control border border-dark") }}
+              </div>
+            </div>
 
-      <div>
-      {# add password fields and labels #} 
-      {{ form.password.label }}
-      {{ form.password() }}
-      </div>
-
-      <div>
-      {# add submit button #}
-      <div>{{ form.submit(class="btn btn-dark text-warning p-2") }}</div>
-      
+            <div class="input-group centered">
+              {# add submit button #}
+              <div>{{ form.submit(class="btn btn-dark text-warning font-weight-bold p-2") }}</div>
+            </div>
+          </div>     
       </div>
   </form>
-  <div>
-    <a class="btn btn-dark text-warning m-2" href="{{ url_for('get_register') }}" role="button">Don't have an account?</a>
+  <div class="centered">
+    <a class="btn btn-dark text-warning m-2 font-weight-bold" href="{{ url_for('get_register') }}" role="button">Don't have an account?</a>
   </div>
   </body>
 </html>
