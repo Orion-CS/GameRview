@@ -54,37 +54,51 @@
 		</div>
 	{% endfor %}
 
-    <form action="/register/" method="post">
+    <form  action="/register/" method="post">
+      <div class="form-group">
         {# add CSRF protection #} 
         {{ form.hidden_tag() }}
 
-        <div>
+        <div class="input-group mb-1 w-75 mt-3 ml-4">
         {# add username field and label #}
-        {{ form.username.label }}
-        {{ form.username() }}
+        <span class="input-group-btn">
+          <button class="btn btn-default btn-dark text-warning font-weight-bold" type="button">{{ form.username.label }}</button>
+     </span>
+        
+        {{ form.username(class="form-control") }}
         </div>
 
-        <div>
+        <div class="input-group mb-1 w-75 mt-1 ml-4">
         {# add email field and label #} 
-        {{ form.email.label }}
-        {{ form.email()}} 
+        <span class="input-group-btn">
+          <button class="btn btn-default btn-dark text-warning font-weight-bold border border-6 border-warning" type="button">{{ form.email.label }}</button>
+        </span>
+        {{form.email(class="form-control")}} 
         </div>
 
-        <div>
+        <div class="input-group mb-1 w-75 mt-1 ml-4">
         {# add password fields and labels #} 
-        {{ form.password.label }}
-        {{ form.password() }}
+        
+        <span class="input-group-btn">
+          <button class="btn btn-default btn-dark text-warning font-weight-bold" type="button">{{ form.password.label }}</button>
+        </span>
+        {{ form.password(class="form-control")}}
         </div>
 
-        <div>
-        {{ form.confirm_password.label }}
-        {{ form.confirm_password() }}
+        <div class="input-group mb-1 w-75 mt-1 ml-4">
+        
+        <span class="input-group-btn">
+          <button class="btn btn-default btn-dark text-warning font-weight-bold" type="button">{{ form.confirm_password.label }}</button>
+        </span>
+        {{ form.confirm_password(class="form-control") }}
         </div>
 
         <div>
         {# add submit button #}
-        {{ form.submit() }}
+        {{ form.submit(class="btn btn-dark font-weight-bold text-warning p-2 ml-5 mt-2") }}
         </div>
+      </div>
+        
     </form>
 </body>
 </html>
