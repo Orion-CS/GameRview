@@ -33,6 +33,12 @@
     font-size: 30px;
     font-weight: 600;
 }
+
+.content{
+    width: 300px;
+    border-width: 5px;
+    height: 150px;
+}
 /* .stars{
     display: flex;
     padding: 10px;
