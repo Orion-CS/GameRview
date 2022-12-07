@@ -14,30 +14,49 @@
     font-size: 50px;
     border-width: 2px;
 }
-.stars{
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    overflow: hidden;
+}
+
+.star-style{
+    height: 40px;
+    width: 40px;
+    padding-right: 2px;
+}
+
+.star-value{
+    margin-top: 5px;
+    font-size: 30px;
+    font-weight: 600;
+}
+/* .stars{
     display: flex;
     padding: 10px;
 }
 
 
-.stars img{
+.stars a{
     filter: grayscale();
     cursor: pointer;
     padding: 2px;
 }
 
-.stars:hover img{
+.stars:hover a{
     filter: none;
 }
 
-.stars img:hover{
+.stars a:hover{
     filter: none;
 }
 
-.stars img:hover ~ img{
+.stars a:hover ~ a{
     filter: grayscale();
 }
 
-.stars img.active{
+.stars a.active{
     filter: none;
-}
+} */

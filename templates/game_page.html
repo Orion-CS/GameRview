@@ -85,7 +85,7 @@
       <div class="row">
         <h3 id="reviews-header">Reviews</h3>
         {% if current_user.is_authenticated %}
-          <a id="add-review" class="btn btn-primary" href="/review/{{game.id}}" role="button">Add Review</a>
+          <a id="add-review" class="btn btn-dark text-warning" href="/review/{{game.id}}" role="button">Add Review</a>
         {% endif %}
       </div>
       {% if reviewTups %}
