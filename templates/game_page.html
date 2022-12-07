@@ -23,7 +23,9 @@
         <input class="form-control mr-sm-2 " type="search" placeholder="Search">
         <button class="text-light btn btn-outline-warning my-2 my-sm-0" type="submit">Search</button>
         {% if not current_user.is_authenticated %}
-        <a class="nav-link text-warning" href="/login/">Login <span class="sr-only">(current)</span></a>
+          <a class="nav-link text-warning" href="/login/">Login <span class="sr-only">(current)</span></a>
+        {% else %}
+          <a class="nav-link text-warning" href="/home/">Logout <span class="sr-only">(current)</span></a>
         {% endif %}
       </form>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,16 +37,16 @@
             <a class="nav-link text-warning" href="/home/">Home <span class="sr-only">(current)</span></a>
           </li>
           {% if current_user.is_authenticated %}
-          <li class="nav-item active">
-            <a class="nav-link text-warning" href="/friends/">Friends <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
-          </li>
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/friends/">Friends <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/profile/">Profile <span class="sr-only">(current)</span></a>
+            </li>
           {% endif %}
-          <li class="nav-item active">
-            <a class="nav-link text-warning" href="/profile/">Profile <span class="sr-only">(current)</span></a>
-          </li>
           </div>
         </ul>
     </nav>
@@ -56,7 +58,7 @@
         <h6 id="rating-header">{{game.rating}}</h6>
       {% endif %}
       {% if current_user.is_authenticated %}
-
+        
       {% endif %}
     </div>
     <div class="row">

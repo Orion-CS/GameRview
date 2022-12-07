@@ -1,13 +1,15 @@
-var profileModal = document.getElementById("profileModal");
+window.addEventListener("DOMContentLoaded", async () => {
+    var profileModal = document.getElementById("profileModal");
 
-var modalBtn = document.getElementById("profileBtn");
+    var modalBtn = document.getElementById("profileBtn");
 
-var closeSpan = document.getElementsByClassName("close")[0];
+    var closeSpan = document.getElementsByClassName("close")[0];
 
-modalBtn.onclick = function() {
-    profileModal.style.display= "block";
-}
+    modalBtn.onclick = function() {
+        profileModal.style.display= "block";
+    }
 
-closeSpan.onclick = function() {
-    profileModal.style.display = "none";
-}
+    closeSpan.onclick = function() {
+        profileModal.style.display = "none";
+    }
+});
