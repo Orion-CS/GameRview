@@ -13,6 +13,7 @@ from tempdata import mario_description
 from registerForm import RegisterForm
 from reviewForm import ReviewForm
 from loginForm import LoginForm
+from userForm import UserForm
 
 # === Hasher ===
 from hasher import Hasher
@@ -289,3 +290,21 @@ def post_login():
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
         return redirect(url_for('get_login'))
+
+@app.route('/update/<int:id>', methods=['GET', 'POST'])
+def update_user(id):
+    form = UserForm()
+    userToUpdate = User.query.get_or_404(id)
+    if request.method == "POST":
+        userToUpdate.username = request.form['username']
+        userToUpdate.email = request.form['email']
+        try:
+            db.session.commit()
+            flash("Successfully updated credentials.")
+            return render_template("home_page.html", form=form, userToUpdate=userToUpdate)
+        except: 
+            flash("Error in updating credentials.")
+            return render_template("home_page.html", form=form, userToUpdate=userToUpdate)
+    else:
+        return render_template("home_page.html", form=form, userToUpdate=userToUpdate)
+
