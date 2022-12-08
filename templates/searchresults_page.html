@@ -53,15 +53,15 @@
       </div>
 
   </div>
-    <h1 id="user-reults-header">Results</h1>
-    <div class="row">
-        {% for user in results %}
-          <a href="/game/{{game.id}}">
-            <img class="game" src="\static\icons\{{user.image}}" id ="first-game" alt="" width="150" height="200"/>
-            <div class="info fade slide-up"> {{game.title}} </div>
-          </a>
-        {% endfor %}
-    </div>
+  <h1 id="top-games-header">Top Games</h1>
+  <div class="row">
+      {% for game in results %}
+        <a href="/game/{{game.id}}">
+          <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
+          <div class="info fade slide-up"> {{game.title}} </div>
+        </a>
+      {% endfor %}
+  </div>
 
 
   </body>
