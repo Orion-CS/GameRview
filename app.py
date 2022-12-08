@@ -237,7 +237,7 @@ def get_game(gId):
     reviewTups = []
     for review in reviews:
         user = User.query.filter_by(id=review.userId).all()[0]
-        reviewTups.append((review, user))
+        reviewTups.append((review, user)) 
     return render_template("game_page.html", user=current_user, game=game, reviewTups=reviewTups)
 
 @app.route('/mygames/')

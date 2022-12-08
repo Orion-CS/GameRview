@@ -4,7 +4,7 @@
 }
 
 #bar{
-  background-color: rgb(35, 35, 36);
+  background-color: #343a40;
 }
 
 .nav-item {
@@ -13,10 +13,10 @@
 .nav-link{
   color: rgb(237,217,73);
   text-align: center;
-  background-color: rgba(88, 95, 99, 0);
+  background-color: #343a40;
   border-radius: 10px;
   margin: .5rem;
-  border: 2px solid  rgb(57, 56, 58);
+  border: 1px solid  #ffc107;
 }
 
 .navbar-toggler-icon{

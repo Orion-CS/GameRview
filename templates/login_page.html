@@ -18,7 +18,7 @@
     <!--<link rel="stylesheet" href="/static/styles/worldcup.css">-->
   </head>
   <body>
-    <nav id="bar" class="navbar sticky-top navbar-expand-lg navbar-light">
+    <nav id="bar" class="navbar border-bottom border-warning sticky-top navbar-expand-lg navbar-light">
       <a id="main" class="navbar-brand" href="/home/">
         <img src="\static\icons\logo.png" width="150" height="70" alt=""></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@
             {{ form.hidden_tag() }}
 
             <div class="input-group centered">
-              <div class="mb-1 w-50 mt-3">
+              <div class="input-group mb-1 w-50 mt-3">
               {# add credentials field and label #}
               <span class="input-group-btn centered">
                 <button class="btn btn-default btn-dark text-warning font-weight-bold" type="button">{{ form.credentials.label }}</button>
@@ -59,7 +59,7 @@
             </div>
             
             <div class="input-group centered">
-              <div class="mb-1 w-50 mt-1">
+              <div class="input-group mb-1 w-50 mt-1">
               {# add password fields and labels #}
               <span class="input-group-btn centered">
                 <button class="btn btn-default btn-dark text-warning font-weight-bold" type="button">{{ form.password.label }}</button>

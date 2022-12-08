@@ -26,7 +26,6 @@ let stars = document.querySelectorAll(".star-style");
 function onDropClick(i){
 let responseField = document.getElementById('rating');
 i = responseField.value-1
-console.log(i);
 fixStars(i);
 }
 
