@@ -169,12 +169,12 @@ def index():
 
 @app.route('/home/')
 def home():
-    game_search_form = GameSearchForm()
+    gsf = GameSearchForm()
     all_games = VideoGame.query.all()
 
     # TODO:get the top games
     top_games = all_games
-    return render_template("home_page.html", current_user=current_user, game_search_form=game_search_form, top_games=top_games)
+    return render_template("home_page.html", current_user=current_user, gsf=gsf, top_games=top_games)
 
 
 @app.route('/register/', methods=["GET"])
@@ -293,19 +293,22 @@ def post_login():
         return redirect(url_for('get_login'))
 
 @app.route('/gamesearchresults/', methods=['POST'])
-def get_searchresults():
-    
-    game_search_form = GameSearchForm()
-    print(game_search_form.searchText.data)
-    if game_search_form.validate():
-        games = VideoGame.query.all()
-        gameName = game_search_form.searchText.data
-        results = []
-
-        for game in games:
-            if gameName.lower() in game.title.lower():
-                results.append(game)
-
-        return render_template("searchresults_page.html", current_user=current_user, results=results)
-    
+def post_searchresults():
+    gsf = GameSearchForm()
+    if gsf.validate():
+        data = gsf.searchText.data if gsf.searchText.data else "*"
+        return redirect(url_for('get_searchresults', searchString=data))
     return redirect(url_for('home'))
+
+@app.route('/gamesearchresults/<string:searchString>/', methods=['GET'])
+def get_searchresults(searchString="*"):
+    gsf = GameSearchForm()
+    if searchString == "*":
+        searchString = ""
+    games = VideoGame.query.all()
+    results = []
+
+    for game in games:
+        if searchString.lower() in game.title.lower():
+            results.append(game)
+    return render_template("searchresults_page.html", current_user=current_user, results=results, gsf=gsf)
