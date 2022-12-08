@@ -53,7 +53,17 @@
         </ul>
     </nav>
 
-    <h1>My Friends</h1>
+    <div>
+      <h1 id="top-games-header">My Friends</h1>
+      <div class="row">
+        {% for friend in friendList %}
+          <a href="/friend/{{game.id}}">
+            <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
+            <div class="info fade slide-up"> {{game.title}} </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
 
   </body>
 </html>

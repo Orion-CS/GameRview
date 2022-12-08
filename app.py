@@ -262,13 +262,29 @@ def get_my_games():
 @app.route('/friends/')
 def get_friends():
     gsf = GameSearchForm()
+    friendList = []
+    friendIds = Friendship.query.filter_by(userId=current_user.id).all()
+    for fId in friendIds:
+        user = User.query.filter_by(id=fId).all()
+        friendList.append(user)
+    return render_template("friends_page.html", current_user=current_user, friendList=friendList, gsf=gsf)
+
+@app.route('/user/<int:id>')
+def get_user(id):    
     if current_user.is_authenticated:
-        friendList = []
-        friendIds = Friendship.query.filter_by(userId=current_user.id).all()
-        for fId in friendIds:
-            user = User.query.filter_by(id=fId).all()
-            friendList.append(user)
-        return render_template("friends_page.html", current_user=current_user, friendList=friendList, gsf=gsf)
+        gsf = GameSearchForm()
+        users = User.query.filter_by(id=id).all()
+        foundUser = users[0]
+        if foundUser:
+            favorite_games = []
+            gameIds = FavoritedGame.query.filter_by(userId=current_user.id).all()
+            for gId in gameIds:
+                game = VideoGame.query.filter_by(id=gId).all()
+                favorite_games.append(game)
+
+            return render_template("friendsinfo_page.html", current_user=current_user, favorite_games=favorite_games, foundUser=foundUser, gsf=gsf)
+        else:
+            return redirect(url_for('home'))
     return redirect(url_for('get_login'))
 
 @app.route('/login/', methods=['GET'])
@@ -321,3 +337,4 @@ def get_searchresults(searchString="*"):
         if searchString.lower() in game.title.lower():
             results.append(game)
     return render_template("searchresults_page.html", current_user=current_user, results=results, gsf=gsf)
+
