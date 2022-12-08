@@ -14,6 +14,7 @@ from registerForm import RegisterForm
 from reviewForm import ReviewForm
 from loginForm import LoginForm
 from gamesearchForm import GameSearchForm
+from usersearchForm import UserSearchForm
 
 # === Hasher ===
 from hasher import Hasher
@@ -261,13 +262,14 @@ def get_my_games():
 @login_required
 @app.route('/friends/')
 def get_friends():
+    usf = UserSearchForm()
     gsf = GameSearchForm()
     friendList = []
     friendIds = Friendship.query.filter_by(userId=current_user.id).all()
     for fId in friendIds:
         user = User.query.filter_by(id=fId).all()
         friendList.append(user)
-    return render_template("friends_page.html", current_user=current_user, friendList=friendList, gsf=gsf)
+    return render_template("friends_page.html", current_user=current_user, friendList=friendList, gsf=gsf, usf=usf)
 
 @app.route('/user/<int:id>')
 def get_user(id):    
@@ -284,7 +286,8 @@ def get_user(id):
 
             return render_template("friendsinfo_page.html", current_user=current_user, favorite_games=favorite_games, foundUser=foundUser, gsf=gsf)
         else:
-            return redirect(url_for('home'))
+            # stay on same page
+            return redirect(request.url)
     return redirect(url_for('get_login'))
 
 @app.route('/login/', methods=['GET'])
@@ -338,3 +341,24 @@ def get_searchresults(searchString="*"):
             results.append(game)
     return render_template("searchresults_page.html", current_user=current_user, results=results, gsf=gsf)
 
+@app.route('/usersearchresults/', methods=['POST'])
+def post_usersearchresults():
+    usf = UserSearchForm()
+    if usf.validate():
+        data = usf.searchText.data
+        return redirect(url_for('get_usersearchresults', searchString=data))
+    # stay on same page
+    return redirect(request.url)
+
+@app.route('/usersearchresults/<string:searchString>/', methods=['GET'])
+def get_usersearchresults(searchString="*"):
+    gsf = GameSearchForm()
+    if searchString == "*":
+        searchString = ""
+    users = User.query.all()
+    results = []
+
+    for u in users:
+        if searchString.lower() in u.username.lower() and u.username != current_user.username:
+            results.append(u)
+    return render_template("userresults_page.html", current_user=current_user, results=results, gsf=gsf)
