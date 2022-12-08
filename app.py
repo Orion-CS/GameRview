@@ -13,13 +13,15 @@ from tempdata import mario_description
 from registerForm import RegisterForm
 from reviewForm import ReviewForm
 from loginForm import LoginForm
+from gamesearchForm import GameSearchForm
+from usersearchForm import UserSearchForm
 from userForm import UserForm
 
 # === Hasher ===
 from hasher import Hasher
 
 # === Login ===
-from flask_login import UserMixin, current_user, login_user
+from flask_login import UserMixin, current_user, login_user, logout_user, login_required
 from flask_login import LoginManager
 login_manager = LoginManager()
 
@@ -169,17 +171,18 @@ def index():
 
 @app.route('/home/')
 def home():
+    gsf = GameSearchForm()
     all_games = VideoGame.query.all()
 
     # TODO:get the top games
     top_games = all_games
-    return render_template("home_page.html", user=current_user, top_games=top_games)
+    return render_template("home_page.html", current_user=current_user, gsf=gsf, top_games=top_games)
 
 
 @app.route('/register/', methods=["GET"])
 def get_register():
     form = RegisterForm()
-    return render_template("register_form.html", user=current_user, form=form)
+    return render_template("register_form.html", current_user=current_user, form=form)
 
 
 @app.route('/register/', methods=["POST"])
@@ -210,11 +213,13 @@ def post_register():
             flash(f"{field}: {error}")
         return redirect(url_for('get_register'))
 
+@login_required
 @app.route('/review/<int:gId>/', methods=['GET'])
 def get_review(gId):
     form = ReviewForm()
-    return render_template("review_form.html", user=current_user, form=form, gId=gId)
+    return render_template("review_form.html", current_user=current_user, form=form, gId=gId)
 
+@login_required
 @app.route('/review/<int:gId>/', methods=['POST'])
 def post_review(gId):
     form = ReviewForm()
@@ -233,43 +238,62 @@ def post_review(gId):
 
 @app.route('/game/<int:gId>/', methods=['GET'])
 def get_game(gId):
+    gsf = GameSearchForm()
     game = VideoGame.query.get_or_404(gId)
     reviews = Review.query.filter_by(gameId=game.id).all()
     reviewTups = []
     for review in reviews:
         user = User.query.filter_by(id=review.userId).all()[0]
         reviewTups.append((review, user)) 
-    return render_template("game_page.html", user=current_user, game=game, reviewTups=reviewTups)
+    return render_template("game_page.html", current_user=current_user, game=game, reviewTups=reviewTups, gsf=gsf)
 
+@login_required
 @app.route('/mygames/')
 def get_my_games():
+    gsf = GameSearchForm()
     if current_user.is_authenticated:
         favorite_games = []
         gameIds = FavoritedGame.query.filter_by(userId=current_user.id).all()
         for gId in gameIds:
             game = VideoGame.query.filter_by(id=gId).all()
             favorite_games.append(game)
-        return render_template("mygames_page.html", user=current_user, favorite_games=favorite_games)
-    return redirect(url_for('get_login'))   
-
-@app.route('/friends/')
-def get_friends():
-    if current_user.is_authenticated:
-        friendList = []
-        friendIds = Friendship.query.filter_by(userId=current_user.id).all()
-        for fId in friendIds:
-            user = User.query.filter_by(id=fId).all()
-            friendList.append(user)
-        return render_template("friends_page.html", user=current_user, friendList=friendList)
+        return render_template("mygames_page.html", current_user=current_user, favorite_games=favorite_games, gsf=gsf)
     return redirect(url_for('get_login'))
 
-@app.route('/calendarview/')
-def get_calendar():
-    return render_template("calendar_page.html", user=current_user)
+@login_required
+@app.route('/friends/')
+def get_friends():
+    usf = UserSearchForm()
+    gsf = GameSearchForm()
+    friendList = []
+    friendIds = Friendship.query.filter_by(userId=current_user.id).all()
+    for fId in friendIds:
+        user = User.query.filter_by(id=fId).all()
+        friendList.append(user)
+    return render_template("friends_page.html", current_user=current_user, friendList=friendList, gsf=gsf, usf=usf)
+
+@app.route('/user/<int:id>')
+def get_user(id):    
+    if current_user.is_authenticated:
+        gsf = GameSearchForm()
+        users = User.query.filter_by(id=id).all()
+        foundUser = users[0]
+        if foundUser:
+            favorite_games = []
+            gameIds = FavoritedGame.query.filter_by(userId=current_user.id).all()
+            for gId in gameIds:
+                game = VideoGame.query.filter_by(id=gId).all()
+                favorite_games.append(game)
+
+            return render_template("friendsinfo_page.html", current_user=current_user, favorite_games=favorite_games, foundUser=foundUser, gsf=gsf)
+        else:
+            # stay on same page
+            return redirect(request.url)
+    return redirect(url_for('get_login'))
 
 @app.route('/login/', methods=['GET'])
 def get_login():
-    return render_template("login_page.html", user=current_user, form=LoginForm())
+    return render_template("login_page.html", current_user=current_user, form=LoginForm())
 
 @app.route('/login/', methods=['POST'])
 def post_login():
@@ -290,6 +314,55 @@ def post_login():
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
         return redirect(url_for('get_login'))
+
+@login_required
+@app.route('/logout/', methods=['GET'])
+def get_logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+@app.route('/gamesearchresults/', methods=['POST'])
+def post_searchresults():
+    gsf = GameSearchForm()
+    if gsf.validate():
+        data = gsf.searchText.data if gsf.searchText.data else "*"
+        return redirect(url_for('get_searchresults', searchString=data))
+    return redirect(url_for('home'))
+
+@app.route('/gamesearchresults/<string:searchString>/', methods=['GET'])
+def get_searchresults(searchString="*"):
+    gsf = GameSearchForm()
+    if searchString == "*":
+        searchString = ""
+    games = VideoGame.query.all()
+    results = []
+
+    for game in games:
+        if searchString.lower() in game.title.lower():
+            results.append(game)
+    return render_template("searchresults_page.html", current_user=current_user, results=results, gsf=gsf)
+
+@app.route('/usersearchresults/', methods=['POST'])
+def post_usersearchresults():
+    usf = UserSearchForm()
+    if usf.validate():
+        data = usf.searchText.data
+        return redirect(url_for('get_usersearchresults', searchString=data))
+    # stay on same page
+    return redirect(request.url)
+
+@app.route('/usersearchresults/<string:searchString>/', methods=['GET'])
+def get_usersearchresults(searchString="*"):
+    gsf = GameSearchForm()
+    if searchString == "*":
+        searchString = ""
+    users = User.query.all()
+    results = []
+
+    for u in users:
+        if searchString.lower() in u.username.lower() and u.username != current_user.username:
+            results.append(u)
+    return render_template("userresults_page.html", current_user=current_user, results=results, gsf=gsf)
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_user(id):

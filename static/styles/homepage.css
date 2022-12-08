@@ -61,3 +61,11 @@
     transition: 200ms ease-in-out;
     transform: translateY(0%);
 }
+
+.noresult {
+    margin-top: 20px;
+    margin-left: 80px;
+    margin-bottom: 30px;
+    width: 200px;
+    font-size: 1.5rem;
+}
