@@ -67,14 +67,53 @@
     <!-- #endregion-->
 
   </div>
-    <h1 id="top-games-header">Top Games</h1>
-    <div class="row">
-        {% for game in top_games %}
-          <a href="/game/{{game.id}}">
-            <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
-            <div class="info fade slide-up"> {{game.title}} </div>
+
+  <div class="bg-dark">
+    <h1 class="text-warning" id="new-header">New Releases</h1>
+    <div class="row bg-dark border border-warning">
+        <div id="carouselExampleControls" class="carousel slide carousel-fluid" data-ride="carousel">
+          <div class="carousel-inner">
+          <ol class="carousel-indicators">
+          {% for game in new_games %}
+          <li data-target="#carouselExampleControls" data-slide-to="{{loop.index}}" class="{% if loop.index == 1 %}active{% endif %}"></li>
+          {% endfor %}
+          </ol>
+            {% for game in new_games %}
+            <div class="carousel-item {% if loop.index == 1 %}active{% endif %} border-bottom border-warning">
+              <a href="/game/{{game.id}}">
+                <img class="d-block " src="\static\icons\{{game.image}}" alt="slide {{loop.index}}">
+                <div class="info fade slide-up text-warning carousel-caption d-none d-sm-block">
+                  <h4>{{game.title}}</h4>
+                  <p>{% if game.rating %} rating: {{game.rating}} {% else %} no ratings yet {% endif %} </p>
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
           </a>
-        {% endfor %}
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+    <div class="top-g bg-dark" >
+      <h1 id="top-games-header">Top Games</h1>
+      <div id="row" class="row bg-dark ml-2">
+          {% for game in top_games %}
+            <a href="/game/{{game.id}}">
+                <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
+                <div class="info fade slide-up text-warning"> {{game.title}} </div>
+            </a>
+          {% endfor %}
+      </div>
     </div>
 
     <link rel="stylesheet" href="/static/styles/profilemodal.css">

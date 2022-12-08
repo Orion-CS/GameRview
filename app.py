@@ -110,7 +110,9 @@ def read_in_games():
     vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
     vg3 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, rating="4/5")
     vg4 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
-    all_games = [vg1, vg2, vg3, vg4]
+    vg5 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
+    vg6 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
+    all_games = [vg1, vg2, vg3, vg4, vg5, vg6]
     # read in games
     return all_games
 
@@ -176,7 +178,8 @@ def home():
 
     # TODO:get the top games
     top_games = all_games
-    return render_template("home_page.html", current_user=current_user, gsf=gsf, top_games=top_games)
+    new_games = all_games
+    return render_template("home_page.html", current_user=current_user, gsf=gsf, top_games=top_games, new_games=new_games)
 
 
 @app.route('/register/', methods=["GET"])
