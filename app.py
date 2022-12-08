@@ -19,7 +19,7 @@ from gamesearchForm import GameSearchForm
 from hasher import Hasher
 
 # === Login ===
-from flask_login import UserMixin, current_user, login_user, login_required
+from flask_login import UserMixin, current_user, login_user, logout_user, login_required
 from flask_login import LoginManager
 login_manager = LoginManager()
 
@@ -236,36 +236,39 @@ def post_review(gId):
 
 @app.route('/game/<int:gId>/', methods=['GET'])
 def get_game(gId):
+    gsf = GameSearchForm()
     game = VideoGame.query.get_or_404(gId)
     reviews = Review.query.filter_by(gameId=game.id).all()
     reviewTups = []
     for review in reviews:
         user = User.query.filter_by(id=review.userId).all()[0]
         reviewTups.append((review, user)) 
-    return render_template("game_page.html", current_user=current_user, game=game, reviewTups=reviewTups)
+    return render_template("game_page.html", current_user=current_user, game=game, reviewTups=reviewTups, gsf=gsf)
 
 @login_required
 @app.route('/mygames/')
 def get_my_games():
+    gsf = GameSearchForm()
     if current_user.is_authenticated:
         favorite_games = []
         gameIds = FavoritedGame.query.filter_by(userId=current_user.id).all()
         for gId in gameIds:
             game = VideoGame.query.filter_by(id=gId).all()
             favorite_games.append(game)
-        return render_template("mygames_page.html", current_user=current_user, favorite_games=favorite_games)
+        return render_template("mygames_page.html", current_user=current_user, favorite_games=favorite_games, gsf=gsf)
     return redirect(url_for('get_login'))
 
 @login_required
 @app.route('/friends/')
 def get_friends():
+    gsf = GameSearchForm()
     if current_user.is_authenticated:
         friendList = []
         friendIds = Friendship.query.filter_by(userId=current_user.id).all()
         for fId in friendIds:
             user = User.query.filter_by(id=fId).all()
             friendList.append(user)
-        return render_template("friends_page.html", current_user=current_user, friendList=friendList)
+        return render_template("friends_page.html", current_user=current_user, friendList=friendList, gsf=gsf)
     return redirect(url_for('get_login'))
 
 @app.route('/login/', methods=['GET'])
@@ -291,6 +294,12 @@ def post_login():
         for field, error in form.errors.items():
             flash(f"{field}: {error}")
         return redirect(url_for('get_login'))
+
+@login_required
+@app.route('/logout/', methods=['GET'])
+def get_logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 @app.route('/gamesearchresults/', methods=['POST'])
 def post_searchresults():
