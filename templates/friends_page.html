@@ -85,7 +85,7 @@
       <div class="row bg-dark ml-2">
         {% for friend in friendList %}
           <a href="/user/{{friend.id}}">
-            <img class="user" src="{{friend.profilePic}}" id ="first-game" alt=""/>
+            <img class="game" src="{{friend.profilePic}}" id ="first-game" alt=""/>
             <div class="info fade slide-up"> {{friend.username}} </div>
           </a>
         {% endfor %}

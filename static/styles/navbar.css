@@ -30,5 +30,17 @@
   margin-bottom: 1.5rem;
 }
 
+.modal.fade .modal-dialog {
+  position: fixed;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  }
+  
+  .modal.fade.in .modal-dialog {
+  overflow-y: scroll;
+  }
 
 
