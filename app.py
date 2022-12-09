@@ -165,7 +165,7 @@ with app.app_context():
     db.drop_all() # TODO: remove this once get all actual data
     db.create_all()
 
-    # db.session.add_all(read_in_games())
+    db.session.add_all(read_in_games())
     db.session.add_all(read_in_users())
     db.session.commit()
 
@@ -223,13 +223,11 @@ def post_register():
         pwd_hash = hasher.hash(form.password.data)
 
         # random user image
-        profile_pics = []
-        image_folder = "static\icons\PFP"
-        for file in os.listdir(image_folder):
-            profile_pics.append(file)
+        profile_pics = ["\static\icons\Xbox_button_A.svg.png", "\static\icons\Xbox_button_B.svg.png",
+                            "\static\icons\Xbox_button_X.svg.png","\static\icons\Xbox_button_Y.svg.png"]
         selected_pic = random.choice(profile_pics)
 
-        userVar = User(profilePic= f"\\{image_folder}\\{selected_pic}", 
+        userVar = User(profilePic= selected_pic, 
             username=form.username.data, 
             email=form.email.data, 
             pwd_hash=pwd_hash)
@@ -282,7 +280,6 @@ def get_game(gId):
 def get_my_games():
     gsf = GameSearchForm()
     if current_user.is_authenticated:
-        print("HERE===")
         favorite_games = []
         gId = FavoritedGame.query.filter_by(userId=current_user.id).all()
         for g in gId:
@@ -307,6 +304,11 @@ def get_friends():
 @app.route('/user/<int:id>')
 def get_user(id):
     if current_user.is_authenticated:
+
+        # check if trying to see myself
+        if current_user.id == id:
+            redirect(url_for('get_my_games'))
+
         gsf = GameSearchForm()
         users = User.query.filter_by(id=id).all()
         foundUser = users[0]
