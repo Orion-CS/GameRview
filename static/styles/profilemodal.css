@@ -21,7 +21,7 @@
   
   .close {
     color: rgb(104, 98, 98);
-    text-align: right;
+    /* text-align: right; */
     float: right;
     font-size: 24px;
     font-weight: bold;
@@ -34,10 +34,10 @@
     cursor: pointer;
   }
 
-  /* .edit-account {
+  .edit-account {
     color: rgb(104, 98, 98);
-    text-align: left;
-    float: right;
+    /* text-align: left; */
+    float: left;
     font-size: 24px;
     font-weight: bold;
   }
@@ -47,7 +47,12 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
-  } */
+  }
+
+  #acc-settings {
+    display: inline-block;
+    text-align: center;
+  }
 
   #profilepic {
     align-self: center;
@@ -64,4 +69,10 @@
     color: rgb(35, 35, 36);;
     align-self: center;
     margin-top: 20px;
+  }
+
+  #email {
+    color: rgb(35, 35, 36);;
+    align-self: center;
+    margin-top: 5px;
   }

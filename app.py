@@ -367,20 +367,33 @@ def get_usersearchresults(searchString="*"):
             results.append(u)
     return render_template("userresults_page.html", current_user=current_user, results=results, gsf=gsf)
 
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
-def update_user(id):
+@app.route('/update/<int:id>', methods=['GET'])
+def get_update_user(id):
     form = UserForm()
-    userToUpdate = User.query.get_or_404(id)
-    if request.method == "POST":
-        userToUpdate.username = request.form['username']
-        userToUpdate.email = request.form['email']
+    user_to_update = User.query.get_or_404(id)
+    return render_template("edit_account.html", user_to_update=user_to_update, form=form)
+
+@app.route('/update/<int:id>', methods=['POST'])
+def post_update_user(id):
+    form = UserForm()
+    user_to_update = User.query.get_or_404(id)
+    if form.validate():
+        if not form.username.data == "" and form.email.data == "":
+            print(form.username.data)
+            user_to_update.username = form.username.data
+        if not form.email.data == "" and form.username.data == "":
+            user_to_update.email = form.email.data
+        else:
+            flash("Please fill in one of the fields.")
+            return redirect(url_for('home'))
         try:
+            db.session.update(user_to_update)
             db.session.commit()
             flash("Successfully updated credentials.")
-            return render_template("home_page.html", form=form, userToUpdate=userToUpdate)
+            return redirect(url_for('home'))
         except: 
             flash("Error in updating credentials.")
-            return render_template("home_page.html", form=form, userToUpdate=userToUpdate)
-    else:
-        return render_template("home_page.html", form=form, userToUpdate=userToUpdate)
+            return  redirect(url_for(request.url))
+    else:  
+        return  redirect(url_for(request.url))
 
