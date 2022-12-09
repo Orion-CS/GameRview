@@ -50,12 +50,26 @@
               <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link text-warning" href="/profile/">Profile <span class="sr-only">(current)</span></a>
+              <a class="nav-link text-warning" id="profileBtn">Profile <span class="sr-only">(current)</span></a>
             </li>
           {% endif %}
           </div>
         </ul>
     </nav>
+
+     <!-- #region profile modal-->
+     <div id="profileModal" class="modal">
+      <div class="modal-content">            
+        <img id="profilepic" src="{{ current_user.profilePic }}" width="200" height="200">
+        <h2 id="username">{{ current_user.username }}</h2>
+        <p id="email">{{ current_user.email }}</p>
+        <div id = "acc-settings">
+          <a class="edit-account" href="/update/{{ current_user.id }}">Edit Account</a>
+          <a class="close">Close</a>
+        </div>
+      </div> 
+    </div>
+    <!-- #endregion-->
 
     {% if current_user.is_authenticated %}
           <a id="friend-button" class="btn btn-dark text-warning mt-auto" style="height:fit-content" role="button"></a>
