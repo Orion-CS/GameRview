@@ -221,15 +221,17 @@ def post_register():
 
         # hash password
         pwd_hash = hasher.hash(form.password.data)
+
+        # random user image
         profile_pics = ["\static\icons\Xbox_button_A.svg.png", "\static\icons\Xbox_button_B.svg.png",
                             "\static\icons\Xbox_button_X.svg.png","\static\icons\Xbox_button_Y.svg.png"]
         selected_pic = random.choice(profile_pics)
+
         userVar = User(profilePic= selected_pic, 
             username=form.username.data, 
             email=form.email.data, 
             pwd_hash=pwd_hash)
-        #global current_user
-        #current_user = userVar
+
         db.session.add(userVar)
         db.session.commit()
         login_user(userVar)
@@ -278,11 +280,13 @@ def get_game(gId):
 def get_my_games():
     gsf = GameSearchForm()
     if current_user.is_authenticated:
+        print("HERE===")
         favorite_games = []
-        games = FavoritedGame.query.filter_by(userId=current_user.id).all()
-        for game in games:
-            game = VideoGame.query.filter_by(id=game.id).all()
-            favorite_games.append(game)
+        gId = FavoritedGame.query.filter_by(userId=current_user.id).all()
+        for g in gId:
+            game = VideoGame.query.filter_by(id=g.gameId).all()
+            favorite_games.append(game[0])
+
         return render_template("mygames_page.html", current_user=current_user, favorite_games=favorite_games, gsf=gsf)
     return redirect(url_for('get_login'))
 
@@ -292,24 +296,24 @@ def get_friends():
     usf = UserSearchForm()
     gsf = GameSearchForm()
     friendList = []
-    friendships = Friendship.query.filter_by(userId=current_user.id).all()
-    for friend in friendships:
-        user = User.query.filter_by(id=friend.id).all()
-        friendList.append(user)
+    friendId = Friendship.query.filter_by(userId=current_user.id).all()
+    for friend in friendId:
+        user = User.query.filter_by(id=friend.friendId).all()
+        friendList.append(user[0])
     return render_template("friends_page.html", current_user=current_user, friendList=friendList, gsf=gsf, usf=usf)
 
 @app.route('/user/<int:id>')
-def get_user(id):    
+def get_user(id):
     if current_user.is_authenticated:
         gsf = GameSearchForm()
         users = User.query.filter_by(id=id).all()
         foundUser = users[0]
         if foundUser:
             favorite_games = []
-            games = FavoritedGame.query.filter_by(userId=current_user.id).all()
-            for g in games:
-                game = VideoGame.query.filter_by(id=g.id).all()
-                favorite_games.append(game)
+            gId = FavoritedGame.query.filter_by(userId=foundUser.id).all()
+            for g in gId:
+                game = VideoGame.query.filter_by(id=g.gameId).all()
+                favorite_games.append(game[0])
 
             return render_template("friendsinfo_page.html", current_user=current_user, favorite_games=favorite_games, foundUser=foundUser, gsf=gsf)
         else:
