@@ -68,8 +68,9 @@
     <!-- #endregion-->
 
   </div>
+  <div class="top-g bg-dark">
     <h1 id="top-games-header">User Results</h1>
-    <div class="row">
+    <div class="row bg-dark ml-2">
       {% if results|length > 0 %}
         {% for user in results %}
           <a href="/user/{{user.id}}">
@@ -81,6 +82,7 @@
         <div class="noresult"> no users found </div>
       {% endif %}
     </div>
+  </div>
 
     <link rel="stylesheet" href="/static/styles/profilemodal.css">
     <script src="/static/scripts/profileModal.js"></script>
