@@ -221,15 +221,17 @@ def post_register():
 
         # hash password
         pwd_hash = hasher.hash(form.password.data)
+
+        # random user image
         profile_pics = ["\static\icons\Xbox_button_A.svg.png", "\static\icons\Xbox_button_B.svg.png",
                             "\static\icons\Xbox_button_X.svg.png","\static\icons\Xbox_button_Y.svg.png"]
         selected_pic = random.choice(profile_pics)
+
         userVar = User(profilePic= selected_pic, 
             username=form.username.data, 
             email=form.email.data, 
             pwd_hash=pwd_hash)
-        #global current_user
-        #current_user = userVar
+
         db.session.add(userVar)
         db.session.commit()
         login_user(userVar)
