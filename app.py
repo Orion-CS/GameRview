@@ -377,23 +377,24 @@ def get_update_user(id):
 def post_update_user(id):
     form = UserForm()
     user_to_update = User.query.get_or_404(id)
-    if form.validate():
+    if form.validate():     
         if not form.username.data == "" and form.email.data == "":
-            print(form.username.data)
             user_to_update.username = form.username.data
-        if not form.email.data == "" and form.username.data == "":
+        elif not form.email.data == "" and form.username.data == "":
             user_to_update.email = form.email.data
-        else:
+        elif form.email.data == "" and form.username.data == "":
             flash("Please fill in one of the fields.")
-            return redirect(url_for('home'))
+            return redirect(url_for('get_update_user', id=id))
+        else:
+            user_to_update.username = form.username.data
+            user_to_update.email = form.email.data
         try:
-            db.session.update(user_to_update)
             db.session.commit()
             flash("Successfully updated credentials.")
-            return redirect(url_for('home'))
+            return redirect(url_for('home', user_to_update=current_user))
         except: 
             flash("Error in updating credentials.")
-            return  redirect(url_for(request.url))
+            return redirect(url_for('get_update_user', id=id))
     else:  
-        return  redirect(url_for(request.url))
+        return redirect(url_for('home', user_to_update=current_user))
 

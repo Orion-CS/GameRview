@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/styles/navbar.css">
     <link rel="stylesheet" href="/static/styles/homepage.css">
+    <link rel="stylesheet" href="/static/styles/friendpage.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
     crossorigin="anonymous">
@@ -44,37 +45,55 @@
               <a class="nav-link text-warning" href="/friends/">Friends <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
+              <a class="nav-link text-warning" href="/mygames/">Favorites <span class="sr-only">(current)</span> </a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link text-warning" href="/profile/">Profile <span class="sr-only">(current)</span></a>
+              <button class="nav-link text-warning" id="profileBtn">Profile <span class="sr-only">(current)</button>
             </li>
           {% endif %}
           </div>
         </ul>
     </nav>
 
+    <div id="profileModal" class="modal">
+      <div class="modal-content">            
+        <img id="profilepic" src="{{ current_user.profilePic }}" width="200" height="200">
+        <h2 id="username">{{ current_user.username }}</h2>
+        <p id="email">{{ current_user.email }}</p>
+        <div id = "acc-settings">
+          <a class="edit-account" href="/update/{{ current_user.id }}">Edit Account</a>
+          <a class="close">Close</a>
+        </div>
+      </div> 
+    </div>
+
     <div class="top-g bg-dark">
       <div class="col">
-        <form class="form-inline my-2 my-lg-0  ml-auto mr-3 order-lg-last" action="/usersearchresults/" method="post">
-          <h1 id="top-games-header">My Friends</h1>
-          {# add CSRF protection #}
-          {{ usf.hidden_tag() }}
-          {{ usf.searchText(class="form-control mr-sm-2", placeholder="Search User") }}
-          <div>{{ gsf.submit(class="text-light btn btn-outline-warning my-2 my-sm-0") }}</div>
-        </form>
+        <h1 id="top-games-header">My Friends</h1>
       </div>
+        <form style="margin-left: 5rem;" class="form-inline order-lg-last" action="/usersearchresults/" method="post">
+          {# add CSRF protection #} 
+          <div class="input-group" id="searchBar">
+            {{ usf.hidden_tag() }}
+            {{ usf.searchText(class="form-control my-2 my-lg-0  ml-auto mr-3 mr-sm-2", placeholder="Search User", style="max-width: auto; width: auto;") }}
+            <span class="input-group-btn">
+            {{ gsf.submit(class="text-light btn btn-outline-warning", style="height: 40px; margin-top: 7px;") }}
+        </span>
+      </div>
+      </form>
 
       <div class="row bg-dark ml-2">
         {% for friend in friendList %}
-          <a href="/user/{{user.id}}">
-            <img class="game" src="{{user.profilePic}}" id ="first-game" alt="" width="150" height="200"/>
-            <div class="info fade slide-up"> {{user.username}} </div>
+          <a href="/user/{{friend.id}}">
+            <img class="user" src="{{friend.profilePic}}" id ="first-game" alt=""/>
+            <div class="info fade slide-up"> {{friend.username}} </div>
           </a>
         {% endfor %}
       </div>
 
     </div>
 
+    <link rel="stylesheet" href="/static/styles/profilemodal.css">
+    <script src="/static/scripts/profileModal.js"></script>
   </body>
 </html>

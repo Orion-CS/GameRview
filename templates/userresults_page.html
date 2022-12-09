@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/static/styles/profilemodal.css">
     <link rel="stylesheet" href="/static/styles/homepage.css">
     <link rel="stylesheet" href="/static/styles/navbar.css">
+    <link rel="stylesheet" href="/static/styles/friendpage.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
     crossorigin="anonymous">
@@ -46,7 +47,7 @@
             <a class="nav-link text-warning" href="/friends/">Friends <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
+            <a class="nav-link text-warning" href="/mygames/">Favorites <span class="sr-only">(current)</span> </a>
           </li>
           <li class="nav-item active">
             <button class="nav-link text-warning" id="profileBtn">Profile <span class="sr-only">(current)</button>
@@ -74,7 +75,7 @@
       {% if results|length > 0 %}
         {% for user in results %}
           <a href="/user/{{user.id}}">
-            <img class="game" src="{{user.profilePic}}" id ="first-game" alt="" width="150" height="200"/>
+            <img class="game" src="{{user.profilePic}}" id ="first-game" alt=""/>
             <div class="info fade slide-up"> {{user.username}} </div>
           </a>
         {% endfor %}

@@ -1,0 +1,9 @@
+#searchBar{
+    border-width: 30%;
+}
+
+.game{
+    object-fit:cover;
+    height: 200px;
+    width: 150px;
+}
