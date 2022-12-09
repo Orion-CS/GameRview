@@ -49,6 +49,11 @@
     cursor: pointer;
   }
 
+  .nav-link:hover,
+  .nav-link:focus {
+    cursor: pointer;
+  }
+
   #acc-settings {
     display: inline-block;
     text-align: center;
