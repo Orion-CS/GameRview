@@ -4,6 +4,7 @@
 
 from flask import Flask, request, render_template, redirect, url_for, abort, session, jsonify
 from flask import flash
+import random
 from flask_sqlalchemy import SQLAlchemy
 
 # === Temp Data ===
@@ -201,7 +202,10 @@ def post_register():
 
         # hash password
         pwd_hash = hasher.hash(form.password.data)
-        userVar = User(profilePic='\static\icons\default-profile-pic.png', 
+        profile_pics = ["\static\icons\Xbox_button_A.svg.png", "\static\icons\Xbox_button_B.svg.png",
+                            "\static\icons\Xbox_button_X.svg.png","\static\icons\Xbox_button_Y.svg.png"]
+        selected_pic = random.choice(profile_pics)
+        userVar = User(profilePic= selected_pic, 
             username=form.username.data, 
             email=form.email.data, 
             pwd_hash=pwd_hash)
