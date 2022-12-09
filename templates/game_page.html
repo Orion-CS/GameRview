@@ -12,7 +12,9 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="/static/scripts/gamepage.js" defer></script>
+    
     <title>Home</title>
   </head>
 
@@ -62,7 +64,7 @@
         <h6 id="rating-header">{{game.rating}}</h6>
       {% endif %}
       {% if current_user.is_authenticated %}
-        
+        <a id="favorite-button" class="btn btn-dark text-warning mt-auto" style="height:fit-content" role="button"></a>
       {% endif %}
     </div>
     <div class="card border-white" style="width:fit-content; margin-right:2rem; display: flex; align-items: left; height:fit-content">
@@ -118,5 +120,8 @@
     </div>
   <div>
 
+
+    <p hidden id="game-id">{{game.id}}</p>
+    <p hidden id="user-id">{{current_user.id}}</p>
   </body>
 </html>
