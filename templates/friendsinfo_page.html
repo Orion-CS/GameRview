@@ -55,9 +55,9 @@
         </ul>
     </nav>
 
-    <div>
+    <div class="top-g bg-dark">
       <h1 id="top-games-header">{{ foundUser.username }}'s Favorite Games</h1>
-      <div class="row">
+      <div class="row bg-dark ml-2">
         {% for game in favorite_games %}
           <a href="/game/{{game.id}}">
             <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
