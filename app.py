@@ -165,7 +165,7 @@ with app.app_context():
     db.drop_all() # TODO: remove this once get all actual data
     db.create_all()
 
-    db.session.add_all(read_in_games())
+    # db.session.add_all(read_in_games())
     db.session.add_all(read_in_users())
     db.session.commit()
 
@@ -223,11 +223,13 @@ def post_register():
         pwd_hash = hasher.hash(form.password.data)
 
         # random user image
-        profile_pics = ["\static\icons\Xbox_button_A.svg.png", "\static\icons\Xbox_button_B.svg.png",
-                            "\static\icons\Xbox_button_X.svg.png","\static\icons\Xbox_button_Y.svg.png"]
+        profile_pics = []
+        image_folder = "static\icons\PFP"
+        for file in os.listdir(image_folder):
+            profile_pics.append(file)
         selected_pic = random.choice(profile_pics)
 
-        userVar = User(profilePic= selected_pic, 
+        userVar = User(profilePic= f"\\{image_folder}\\{selected_pic}", 
             username=form.username.data, 
             email=form.email.data, 
             pwd_hash=pwd_hash)
