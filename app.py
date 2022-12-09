@@ -2,7 +2,7 @@
 # GameRview Semester Project
 # R. Todd Pinsenschaum II, Andy Beichner, Amy Cunningham, Zach Goniea
 
-from flask import Flask, request, render_template, redirect, url_for, abort, session
+from flask import Flask, request, render_template, redirect, url_for, abort, session, jsonify
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
 
@@ -256,9 +256,9 @@ def get_my_games():
     gsf = GameSearchForm()
     if current_user.is_authenticated:
         favorite_games = []
-        gameIds = FavoritedGame.query.filter_by(userId=current_user.id).all()
-        for gId in gameIds:
-            game = VideoGame.query.filter_by(id=gId).all()
+        games = FavoritedGame.query.filter_by(userId=current_user.id).all()
+        for game in games:
+            game = VideoGame.query.filter_by(id=game.id).all()
             favorite_games.append(game)
         return render_template("mygames_page.html", current_user=current_user, favorite_games=favorite_games, gsf=gsf)
     return redirect(url_for('get_login'))
@@ -269,9 +269,9 @@ def get_friends():
     usf = UserSearchForm()
     gsf = GameSearchForm()
     friendList = []
-    friendIds = Friendship.query.filter_by(userId=current_user.id).all()
-    for fId in friendIds:
-        user = User.query.filter_by(id=fId).all()
+    friendships = Friendship.query.filter_by(userId=current_user.id).all()
+    for friend in friendships:
+        user = User.query.filter_by(id=friend.id).all()
         friendList.append(user)
     return render_template("friends_page.html", current_user=current_user, friendList=friendList, gsf=gsf, usf=usf)
 
@@ -283,9 +283,9 @@ def get_user(id):
         foundUser = users[0]
         if foundUser:
             favorite_games = []
-            gameIds = FavoritedGame.query.filter_by(userId=current_user.id).all()
-            for gId in gameIds:
-                game = VideoGame.query.filter_by(id=gId).all()
+            games = FavoritedGame.query.filter_by(userId=current_user.id).all()
+            for g in games:
+                game = VideoGame.query.filter_by(id=g.id).all()
                 favorite_games.append(game)
 
             return render_template("friendsinfo_page.html", current_user=current_user, favorite_games=favorite_games, foundUser=foundUser, gsf=gsf)
@@ -398,3 +398,80 @@ def post_update_user(id):
     else:  
         return redirect(url_for('home', user_to_update=current_user))
 
+@app.route('/toggleFavorite/', methods=['POST'])
+def toggleFavorite():
+    toggle_data = request.get_json()
+    gameId = toggle_data[0].get("gameId")
+    userId = current_user.id
+    isFavorite = False
+
+    favGames = FavoritedGame.query.filter_by(userId=userId, gameId=gameId).all()
+    print(favGames)
+    if favGames:
+        # returned a game so remove it
+        favGame = favGames[0]
+        db.session.delete(favGame)
+        db.session.commit()
+    else:
+        # returned nothing so add it
+        newFGame = FavoritedGame(userId=userId, gameId=gameId)
+        isFavorite = True
+        db.session.add(newFGame)
+        db.session.commit()
+
+    results = {'favorite': isFavorite}
+    return jsonify(results)
+
+@app.route('/getFavorite/', methods=['POST'])
+def getFavorite():
+    toggle_data = request.get_json()
+    gameId = toggle_data[0].get("gameId")
+    userId = current_user.id
+    isFavorite = False
+
+    favGames = FavoritedGame.query.filter_by(userId=userId, gameId=gameId).all()
+    
+    if favGames:
+        isFavorite = True
+
+    results = {'favorite': isFavorite}
+    return jsonify(results)
+
+@app.route('/toggleFriend/', methods=['POST'])
+def toggleFriend():
+    toggle_data = request.get_json()
+    friendId = toggle_data[0].get("friendId")
+    userId = current_user.id
+    isFriend = False
+
+    friends = Friendship.query.filter_by(userId=userId, friendId=friendId).all()
+
+    if friends:
+        # returned a game so remove it
+        friend = friends[0]
+        db.session.delete(friend)
+        db.session.commit()
+    else:
+        # returned nothing so add it
+        friend = Friendship(userId=userId, friendId=friendId)
+        isFriend = True
+        db.session.add(friend)
+        db.session.commit()
+
+    results = {'friend': isFriend}
+    return jsonify(results)
+
+@app.route('/getFriend/', methods=['POST'])
+def getFriend():
+    toggle_data = request.get_json()
+    friendId = toggle_data[0].get("friendId")
+    userId = current_user.id
+    isFriend = False
+
+    favGames = Friendship.query.filter_by(userId=userId, friendId=friendId).all()
+    
+    if favGames:
+        isFriend = True
+
+    results = {'friend': isFriend}
+    return jsonify(results)

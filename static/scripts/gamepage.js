@@ -48,20 +48,9 @@ function toggleFavorite() {
         contentType: "application/json",
         dataType: 'json',
         success: function(result) {
-            toggle(result)
+            setFavorite(result)
           } 
     });
-}
-
-function toggle(result) {
-    const favoriteButton = document.getElementById("favorite-button");
-
-    // check if is favorite
-    if (result.favorite) {
-        favoriteButton.innerText = "Un-Favorite"
-    } else {
-        favoriteButton.innerText = "Favorite"
-    }
 }
 
 function setupFavorite() {
