@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles/homepage.css">
+    <link rel="stylesheet" href="/static/styles/navbar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+
+    <title>Edit Account</title>
+</head>
+<body>
+    <nav id="bar" class="navbar border-bottom border-warning sticky-top navbar-expand-lg navbar-light">
+        <a id="main" class="navbar-brand" href="/home/">
+          <img src="\static\icons\logo.png" width="150" height="70" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon bg-secondary"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/home/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/friends/">Friends <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link text-warning" href="/mygames/">My Games <span class="sr-only">(current)</span> </a>
+            </li>
+            <li class="nav-item active">
+              <button class="nav-link text-warning" id="profileBtn">Profile <span class="sr-only">(current)</button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    
+        <h1 class="centered">Edit Account</h1>
+    
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    
+        <form  action="/update/{{ current_user.id }}" method="post">
+          <div class="form-horizontal">
+            <div class="row">
+    
+              {# add CSRF protection #}
+              {{ form.hidden_tag() }}
+    
+              <div class="input-group centered">
+                <div class="input-group mb-1 w-75 mt-3">
+                {# add username field and label #}
+                <span class="input-group-btn centered">
+                  <button class="btn btn-default btn-dark text-warning font-weight-bold" type="button">{{ form.username.label }}</button>
+                </span>
+                {{ form.username(class="form-control border-dark") }}
+                </div>
+              </div>
+    
+              <div class="input-group centered">
+                <div class="input-group mb-1 w-75 mt-1">
+                {# add email field and label #}
+                <span class="input-group-btn centered">
+                  <button class="btn btn-default btn-dark text-warning font-weight-bold border border-warning" type="button">{{ form.email.label }}</button>
+                </span>
+                {{form.email(class="form-control border-dark")}}
+                </div>
+              </div>
+
+                <div class="input-group centered">
+                {# add submit button #}
+                  <div>{{ form.submit(class="btn btn-dark font-weight-bold text-warning p-2 mt-2") }}</div>
+                </div>
+            </div>
+          </div>
+            
+        </form>
+</body>
+</html>
