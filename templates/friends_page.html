@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/styles/navbar.css">
+    <link rel="stylesheet" href="/static/styles/homepage.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
     crossorigin="anonymous">
@@ -53,18 +54,18 @@
         </ul>
     </nav>
 
-    <div>
+    <div class="top-g bg-dark">
       <div class="col">
-        <h1 id="top-games-header">My Friends</h1>
         <form class="form-inline my-2 my-lg-0  ml-auto mr-3 order-lg-last" action="/usersearchresults/" method="post">
-          {# add CSRF protection #} 
+          <h1 id="top-games-header">My Friends</h1>
+          {# add CSRF protection #}
           {{ usf.hidden_tag() }}
           {{ usf.searchText(class="form-control mr-sm-2", placeholder="Search User") }}
           <div>{{ gsf.submit(class="text-light btn btn-outline-warning my-2 my-sm-0") }}</div>
         </form>
       </div>
 
-      <div class="row">
+      <div class="row bg-dark ml-2">
         {% for friend in friendList %}
           <a href="/user/{{user.id}}">
             <img class="game" src="{{user.profilePic}}" id ="first-game" alt="" width="150" height="200"/>
@@ -72,6 +73,7 @@
           </a>
         {% endfor %}
       </div>
+
     </div>
 
   </body>

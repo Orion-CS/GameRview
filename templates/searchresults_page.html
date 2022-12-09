@@ -68,18 +68,20 @@
     <!-- #endregion-->
 
   </div>
-    <h1 id="top-games-header">Game Results</h1>
-    <div class="row">
-      {% if results|length > 0 %}
-        {% for game in results %}
-          <a href="/game/{{game.id}}">
-            <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
-            <div class="info fade slide-up"> {{game.title}} </div>
-          </a>
-        {% endfor %}
-      {% else %}
-        <div class="noresult"> no games found </div>
-      {% endif %}
+    <div class="top-g bg-dark">
+      <h1 id="top-games-header">Game Results</h1>
+      <div class="row bg-dark ml-2">
+        {% if results|length > 0 %}
+          {% for game in results %}
+            <a href="/game/{{game.id}}">
+              <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
+              <div class="info fade slide-up"> {{game.title}} </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          <div class="noresult"> no games found </div>
+        {% endif %}
+      </div>
     </div>
 
     <link rel="stylesheet" href="/static/styles/profilemodal.css">
