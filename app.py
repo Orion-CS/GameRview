@@ -377,20 +377,11 @@ def get_update_user(id):
 def post_update_user(id):
     form = UserForm()
     user_to_update = User.query.get_or_404(id)
-    if form.validate():
-       
+    if form.validate():     
         if not form.username.data == "" and form.email.data == "":
             user_to_update.username = form.username.data
-            print(user_to_update.username)
-            print(form.username.data)
-            print(user_to_update.email)
-            print(form.email.data)
         elif not form.email.data == "" and form.username.data == "":
             user_to_update.email = form.email.data
-            app.logger.info(user_to_update.username)
-            app.logger.info(form.username.data)
-            app.logger.info(user_to_update.email)
-            app.logger.info(form.email.data)
         elif form.email.data == "" and form.username.data == "":
             flash("Please fill in one of the fields.")
             return redirect(url_for('get_update_user', id=id))

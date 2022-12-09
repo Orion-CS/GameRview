@@ -50,12 +50,26 @@
               <a class="nav-link text-warning" href="/mygames/">Favorites <span class="sr-only">(current)</span> </a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link text-warning" href="/profile/">Profile <span class="sr-only">(current)</span></a>
+              <button class="nav-link text-warning" id="profileBtn">Profile <span class="sr-only">(current)</button>
             </li>
           {% endif %}
           </div>
         </ul>
     </nav>
+
+  {% if current_user.is_authenticated %}
+    <div id="profileModal" class="modal">
+        <div class="modal-content">            
+          <img id="profilepic" src="{{ current_user.profilePic }}" width="200" height="200">
+          <h2 id="username">{{ current_user.username }}</h2>
+          <p id="email">{{ current_user.email }}</p>
+          <div id = "acc-settings">
+            <a class="edit-account" href="/update/{{ current_user.id }}">Edit Account</a>
+            <a class="close">Close</a>
+          </div>
+        </div> 
+    </div>
+  {% endif %}
 
   </div>
     <div class="row">
@@ -123,5 +137,7 @@
 
     <p hidden id="game-id">{{game.id}}</p>
     <p hidden id="user-id">{{current_user.id}}</p>
+    <link rel="stylesheet" href="/static/styles/profilemodal.css">
+    <script src="/static/scripts/profileModal.js"></script>
   </body>
 </html>
