@@ -307,7 +307,7 @@ def get_user(id):
 
         # check if trying to see myself
         if current_user.id == id:
-            redirect(url_for('get_my_games'))
+            return redirect(url_for('get_my_games'))
 
         gsf = GameSearchForm()
         users = User.query.filter_by(id=id).all()
