@@ -4,10 +4,12 @@
 
 from flask import Flask, request, render_template, redirect, url_for, abort, session, jsonify
 from flask import flash
+import random
 from flask_sqlalchemy import SQLAlchemy
 
 # === Temp Data ===
 from tempdata import mario_description
+import json
 
 # === Forms ===
 from registerForm import RegisterForm
@@ -30,6 +32,8 @@ login_manager = LoginManager()
 import os, sys
 script_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(script_dir)
+
+gameInfoFile = os.path.join(script_dir, "gameInfo.json")
 
 # Identifying the Database File
 dbfile = os.path.join(script_dir + "\database", "gamerview.sqlite3")
@@ -106,15 +110,31 @@ class Review(db.Model):
 # region Helper Methods
 
 def read_in_games():
-    vg1 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating="4/5")
-    vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
-    vg3 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, rating="4/5")
-    vg4 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
-    vg5 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
-    vg6 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
-    all_games = [vg1, vg2, vg3, vg4, vg5, vg6]
+    gameInformation = open(gameInfoFile)
+    data = json.load(gameInformation)
+    all_games = []
+    for game in data:
+        id = game.get('id', -1)
+        cover = game.get('cover', 00000)
+        studio = game.get('created_at', "No Studio")
+        release = game.get('first_release_date', 0000)
+        name = game.get('name', "anonymous")
+        rating = game.get('rating', 0.0)
+        rating_count = game.get('rating_count', 0)
+        summary = game.get('summary', "An awesome game. You should totally play it!!! :)")
+    
+        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image="marioFiller.png", description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=rating)
+        all_games.append(new_game)
+        
+        #vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
+        #vg3 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, rating="4/5")
+        #vg4 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
+        #vg5 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
+        #vg6 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description)
     # read in games
+    gameInformation.close()
     return all_games
+
 
 
 def read_in_users():
@@ -201,7 +221,10 @@ def post_register():
 
         # hash password
         pwd_hash = hasher.hash(form.password.data)
-        userVar = User(profilePic='\static\icons\default-profile-pic.png', 
+        profile_pics = ["\static\icons\Xbox_button_A.svg.png", "\static\icons\Xbox_button_B.svg.png",
+                            "\static\icons\Xbox_button_X.svg.png","\static\icons\Xbox_button_Y.svg.png"]
+        selected_pic = random.choice(profile_pics)
+        userVar = User(profilePic= selected_pic, 
             username=form.username.data, 
             email=form.email.data, 
             pwd_hash=pwd_hash)
