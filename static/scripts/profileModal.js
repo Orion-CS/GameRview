@@ -4,10 +4,14 @@ var modalBtn = document.getElementById("profileBtn");
 
 var closeBtn = document.getElementsByClassName("close")[0];
 
-modalBtn.onclick = function() {
-    profileModal.style.display = "block";
+if (modalBtn != null) {
+    modalBtn.onclick = function() {
+        profileModal.style.display = "block";
+    }
 }
 
-closeBtn.onclick = function() {
-    profileModal.style.display = "none";
+if (closeBtn != null) {
+    closeBtn.onclick = function() {
+        profileModal.style.display = "none";
+    }
 }

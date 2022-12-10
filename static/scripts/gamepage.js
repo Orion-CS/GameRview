@@ -22,26 +22,30 @@ window.addEventListener("DOMContentLoaded", async () => {
     };
 
     const favoriteButton = document.getElementById("favorite-button");
-    favoriteButton.addEventListener("click", toggleFavorite);
-
-    setupFavorite();
-
+    if (favoriteButton != null) {
+        favoriteButton.addEventListener("click", toggleFavorite);
+        setupFavorite();
+    }
 });
 
 function gameRating(){
-    for (let i=0; i<5 ;i++){
-        let V = document.getElementById("text").innerText[0];
-        console.log(V);
-        let starImg = document.createElement("img");
-        if(i<=V-1){
-            starImg.src = "/static/icons/star.png"
-        }else{
-           starImg.src = "/static/icons/stargray.png"; 
-        }
-        starImg.className = "star-style";
+    let V = document.getElementById("text").innerText[0];
+    if (V >= 0) {
+        for (let i=0; i<5 ;i++){
+            let starImg = document.createElement("img");
+            if(i<=V-1){
+                starImg.src = "/static/icons/star.png"
+            }else{
+            starImg.src = "/static/icons/stargray.png"; 
+            }
+            starImg.className = "star-style";
+            document.getElementById("tstars").appendChild(starImg);
+        } 
+    } else {
+        let starImg = document.createElement("div");
+        starImg.innerText = "no reviews yet"
         document.getElementById("tstars").appendChild(starImg);
-        
-    } 
+    }
     document.getElementById("text").hidden;
 }
 
