@@ -210,9 +210,14 @@ def home():
     gsf = GameSearchForm()
     all_games = VideoGame.query.all()
 
-    # TODO:get the top games
     top_games = all_games
+    top_games = sorted(top_games, key=lambda x: x.rating, reverse=True)
+    top_games = top_games[0:21]
+
     new_games = all_games
+    new_games = sorted(new_games, key=lambda x: x.releaseDate, reverse=True)
+    new_games = new_games[0:5]
+    
     return render_template("home_page.html", current_user=current_user, gsf=gsf, top_games=top_games, new_games=new_games)
 
 
