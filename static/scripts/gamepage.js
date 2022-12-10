@@ -5,7 +5,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     let starsContainer = document.getElementById("stars");
     let reviews = document.getElementsByClassName("reviews");
-    
+    gameRating();
 
     for(let j=0; j<reviews.length; j++){ 
         for (let i=0; i<5 ;i++){
@@ -25,7 +25,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     favoriteButton.addEventListener("click", toggleFavorite);
 
     setupFavorite();
-    gameRating();
+
 });
 
 function gameRating(){
