@@ -288,7 +288,7 @@ def post_review(gId):
 def get_game(gId):
     gsf = GameSearchForm()
     game = VideoGame.query.get_or_404(gId)
-    date_to_datetime = datetime.datetime.fromtimestamp(game.releaseDate/1e3)
+    date_to_datetime = datetime.datetime.fromtimestamp(game.releaseDate)
     formatted_date = (date_to_datetime.strftime("%m/%d/%Y"))
     reviews = Review.query.filter_by(gameId=game.id).all()
     reviewTups = []
