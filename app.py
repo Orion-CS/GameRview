@@ -175,13 +175,13 @@ def read_in_pepper():
 
 
 # === Set Up Database ===
-with app.app_context():
+#with app.app_context():
     # Create the database for this model
-    db.drop_all() # TODO: remove this once get all actual data
-    db.create_all()
+    #db.drop_all() # TODO: remove this once get all actual data
+    #db.create_all()
 
-    db.session.add_all(read_in_games())
-    db.session.commit()
+    #db.session.add_all(read_in_games())
+    #db.session.commit()
 
 
 # === Hashing ===
