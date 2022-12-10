@@ -6,6 +6,7 @@ from flask import Flask, request, render_template, redirect, url_for, abort, ses
 from flask import flash
 import random
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
 # === Temp Data ===
 from tempdata import mario_description
@@ -124,7 +125,7 @@ def read_in_games():
     for game in data:
         id = game.get('id', -1)
         temp_cover = game.get('cover', -1)
-        cover = all_urls.get(temp_cover, "none")
+        cover = all_urls.get(temp_cover, "/static/icons/no_image.jpg")
         studio = game.get('created_at', "No Studio")
         release = game.get('first_release_date', 0)
         name = game.get('name', "anonymous")
@@ -135,7 +136,7 @@ def read_in_games():
         # change rating from 0-100 to 0-5
         changed_rating = (rating/100) * 5
     
-        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image=cover, description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=changed_rating, rating_count=rating_count)
+        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image=cover, description=summary, trailerLink=None, rating=changed_rating, rating_count=rating_count)
         all_games.append(new_game)
         
         #vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
@@ -172,7 +173,7 @@ with app.app_context():
     db.create_all()
 
     db.session.add_all(read_in_games())
-    #db.session.commit()
+    db.session.commit()
 
 
 # === Hashing ===
@@ -287,12 +288,15 @@ def post_review(gId):
 def get_game(gId):
     gsf = GameSearchForm()
     game = VideoGame.query.get_or_404(gId)
+    date_to_datetime = datetime.datetime.fromtimestamp(game.releaseDate)
+    formatted_date = (date_to_datetime.strftime("%m/%d/%Y"))
     reviews = Review.query.filter_by(gameId=game.id).all()
     reviewTups = []
     for review in reviews:
         user = User.query.filter_by(id=review.userId).all()[0]
         reviewTups.append((review, user)) 
-    return render_template("game_page.html", current_user=current_user, game=game, reviewTups=reviewTups, gsf=gsf)
+    return render_template("game_page.html", current_user=current_user, game=game, 
+        reviewTups=reviewTups, gsf=gsf, formatted_date=formatted_date)
 
 @login_required
 @app.route('/mygames/')

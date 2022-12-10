@@ -47,7 +47,7 @@
 }
 
 #favorite-button {
-    margin-top: 60px;
+    margin-top: 30px;
     margin-left: 40px;
     margin-bottom: 15px;
 }
@@ -88,6 +88,15 @@
 }
 .wrapper{
     margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    overflow: hidden;
+    padding-left: 10px
+}
+
+.swrapper{
+    margin-top: 1px;
     display: flex;
     flex-direction: column;
     height: 50px;

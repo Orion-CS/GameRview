@@ -5,7 +5,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     let starsContainer = document.getElementById("stars");
     let reviews = document.getElementsByClassName("reviews");
-    
+    gameRating();
 
     for(let j=0; j<reviews.length; j++){ 
         for (let i=0; i<5 ;i++){
@@ -25,7 +25,26 @@ window.addEventListener("DOMContentLoaded", async () => {
     favoriteButton.addEventListener("click", toggleFavorite);
 
     setupFavorite();
+
 });
+
+function gameRating(){
+    for (let i=0; i<5 ;i++){
+        let V = document.getElementById("text").innerText[0];
+        console.log(V);
+        let starImg = document.createElement("img");
+        if(i<=V-1){
+            starImg.src = "/static/icons/star.png"
+        }else{
+           starImg.src = "/static/icons/stargray.png"; 
+        }
+        starImg.className = "star-style";
+        document.getElementById("tstars").appendChild(starImg);
+        
+    } 
+    document.getElementById("text").hidden;
+}
+
 
 function toggleFavorite() {
     const gameIdText = document.getElementById("game-id");

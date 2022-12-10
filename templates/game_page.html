@@ -72,31 +72,39 @@
   {% endif %}
 
   </div>
-    <div class="row">
-      <h1 id="top-games-header">{{game.title}}</h1> 
-      <h6 id="rating-header">
-        {% if game.rating %}
-          {{game.rating}}/5
-        {% else %}
-          0/5
-        {% endif %}
-      </h6>
+    <div class="row bg-dark text-warning" style="margin-top: 40px;">
+      <h1 id="top-games-header" style="margin-top: 20px;">{{game.title}}</h1> 
+      <h6 id="rating-header" style="margin-top: 32px;">
+      {% if game.rating %}
+        <div class="swrapper centered">
+          <div id="tstars" class="starsContainer"></div>
+          <div id="display-star-value" class="star-value"></div>
+        </div>
+        <p hidden id="text">{{game.rating}}/5</p>
+      {% else %}
+        <div class="swrapper centered">
+          <div id="tstars" class="starsContainer"></div>
+          <div id="display-star-value" class="star-value"></div>
+        </div>
+        <p hidden id="text">0/5</p>
+      {% endif %}
+    </h6>
       {% if current_user.is_authenticated %}
-        <a id="favorite-button" class="btn btn-dark text-warning mt-auto" style="height:fit-content" role="button"></a>
+        <a id="favorite-button" class="btn btn-dark text-warning border border-warning" style="height:fit-content" role="button"></a>
       {% endif %}
     </div>
     <div class="card border-white" style="width:fit-content; margin-right:2rem; display: flex; align-items: left; height:fit-content">
       <div class="row">
-        <img class="img-fluid game" src="\static\icons\{{game.image}}" id ="first-game" alt=""/>
+        <img class="img-fluid game" src="{{game.image}}" id ="first-game" alt=""/>
         <div class="card bg-dark" id="game-info">
           <div>
-            <h5 class="card border-dark bg-dark text-warning p-3" >Released {{game.releaseDate}}</h5>
+            <h5 class="card border-dark bg-dark text-warning p-3" >Released {{ formatted_date }}</h5>
           </div>
           <div>
             <h5 class="card border-dark bg-dark text-warning p-3" >Created by {{game.studio}}</h5>
           </div>
           <div>
-            <h7 class="card border-dark bg-dark text-warning p-3" style="width: auto; height:auto" id="synopsis">{{game.description}}</h7>
+            <h6 class="card border-dark bg-dark text-warning p-3" style="width: auto; height:auto" id="synopsis">{{game.description}}</h6>
           </div>
         </div>
       

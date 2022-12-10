@@ -58,8 +58,8 @@
         </ul>
     </nav>
 
-     <!-- #region profile modal-->
-     <div id="profileModal" class="modal">
+    <!-- #region profile modal-->
+    <div id="profileModal" class="modal">
       <div class="modal-content">            
         <img id="profilepic" src="{{ current_user.profilePic }}" width="200" height="200">
         <h2 id="username">{{ current_user.username }}</h2>
@@ -84,7 +84,7 @@
       <div class="row bg-dark ml-2">
         {% for game in favorite_games %}
           <a href="/game/{{game.id}}">
-            <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
+            <img class="game" src="{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
             <div class="info fade slide-up" > 
               <p class="info" id="game-title">{{ game.title }} </p>
             </div>
