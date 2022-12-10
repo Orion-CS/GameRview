@@ -34,6 +34,7 @@ script_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(script_dir)
 
 gameInfoFile = os.path.join(script_dir, "gameInfo.json")
+urlInfoFile = os.path.join(script_dir, "coverURLFile.json")
 
 # Identifying the Database File
 dbfile = os.path.join(script_dir + "\database", "gamerview.sqlite3")
@@ -111,12 +112,19 @@ class Review(db.Model):
 # region Helper Methods
 
 def read_in_games():
+    coverURL = open(urlInfoFile)
+    url_data = json.load(coverURL)
+    all_urls = {}
+    for url in url_data:
+        all_urls[url.get("id")] = url.get("url")
+
     gameInformation = open(gameInfoFile)
     data = json.load(gameInformation)
     all_games = []
     for game in data:
         id = game.get('id', -1)
-        cover = game.get('cover', 0)
+        temp_cover = game.get('cover', -1)
+        cover = all_urls.get(temp_cover, "none")
         studio = game.get('created_at', "No Studio")
         release = game.get('first_release_date', 0)
         name = game.get('name', "anonymous")
@@ -127,7 +135,7 @@ def read_in_games():
         # change rating from 0-100 to 0-5
         changed_rating = (rating/100) * 5
     
-        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image="marioFiller.png", description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=changed_rating, rating_count=rating_count)
+        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image=cover, description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=changed_rating, rating_count=rating_count)
         all_games.append(new_game)
         
         #vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
