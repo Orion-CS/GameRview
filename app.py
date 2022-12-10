@@ -172,7 +172,7 @@ with app.app_context():
     db.create_all()
 
     db.session.add_all(read_in_games())
-    #db.session.commit()
+    db.session.commit()
 
 
 # === Hashing ===
