@@ -66,7 +66,7 @@ class VideoGame(db.Model):
     description = db.Column(db.Unicode, nullable=False)
     trailerLink = db.Column(db.Unicode, nullable=True)
     rating = db.Column(db.Integer, nullable=True)
-    rating_count = db.Column(db.Unicode, nullable=True)
+    rating_count = db.Column(db.Integer, nullable=True)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'Users'
@@ -258,8 +258,20 @@ def post_review(gId):
     if form.validate():
         # add the review to table
         text = form.review.data if form.review else ""
-        rating = f"{form.rating.data}/5"
+        rating = int(form.rating.data)
         r = Review(text=text, rating=rating, userId=current_user.id, gameId=gId)
+
+        # change rating
+        game = VideoGame.query.filter_by(id=gId).all()[0]
+        cur_rating = game.rating
+        cur_count = game.rating_count
+
+        new_count = cur_count + 1
+        new_rating = cur_rating + ((rating - cur_rating)/new_count)
+
+        game.rating = new_rating
+        game.cur_count = new_count
+
         db.session.add(r)
         db.session.commit()
         return redirect(f"/game/{gId}")
