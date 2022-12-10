@@ -50,6 +50,9 @@ function gameRating(){
 }
 
 
+
+
+
 function toggleFavorite() {
     const gameIdText = document.getElementById("game-id");
     const gameId = gameIdText.innerText
