@@ -6,6 +6,7 @@ from flask import Flask, request, render_template, redirect, url_for, abort, ses
 from flask import flash
 import random
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
 # === Temp Data ===
 from tempdata import mario_description
@@ -34,6 +35,7 @@ script_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(script_dir)
 
 gameInfoFile = os.path.join(script_dir, "gameInfo.json")
+urlInfoFile = os.path.join(script_dir, "coverURLFile.json")
 
 # Identifying the Database File
 dbfile = os.path.join(script_dir + "\database", "gamerview.sqlite3")
@@ -60,7 +62,7 @@ class VideoGame(db.Model):
     __tablename__ = 'VideoGames'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode, nullable=False)
-    releaseDate = db.Column(db.Unicode, nullable=False)
+    releaseDate = db.Column(db.Integer, nullable=False)
     studio = db.Column(db.Unicode, nullable=False)
     image = db.Column(db.Unicode, nullable=False)
     description = db.Column(db.Unicode, nullable=False)
@@ -111,14 +113,21 @@ class Review(db.Model):
 # region Helper Methods
 
 def read_in_games():
+    coverURL = open(urlInfoFile)
+    url_data = json.load(coverURL)
+    all_urls = {}
+    for url in url_data:
+        all_urls[url.get("id")] = url.get("url")
+
     gameInformation = open(gameInfoFile)
     data = json.load(gameInformation)
     all_games = []
     for game in data:
         id = game.get('id', -1)
-        cover = game.get('cover', 00000)
+        temp_cover = game.get('cover', -1)
+        cover = all_urls.get(temp_cover, "/static/icons/no_image.jpg")
         studio = game.get('created_at', "No Studio")
-        release = game.get('first_release_date', 0000)
+        release = game.get('first_release_date', 0)
         name = game.get('name', "anonymous")
         rating = game.get('rating', 0.0)
         rating_count = game.get('rating_count', 0)
@@ -127,7 +136,7 @@ def read_in_games():
         # change rating from 0-100 to 0-5
         changed_rating = (rating/100) * 5
     
-        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image="marioFiller.png", description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=changed_rating, rating_count=rating_count)
+        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image=cover, description=summary, trailerLink=None, rating=changed_rating, rating_count=rating_count)
         all_games.append(new_game)
         
         #vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
@@ -139,12 +148,6 @@ def read_in_games():
     gameInformation.close()
     return all_games
 
-
-
-def read_in_users():
-    all_users = []
-    # read in users
-    return all_users
 
 # endregion
 
@@ -170,7 +173,6 @@ with app.app_context():
     db.create_all()
 
     db.session.add_all(read_in_games())
-    db.session.add_all(read_in_users())
     db.session.commit()
 
 
@@ -286,12 +288,15 @@ def post_review(gId):
 def get_game(gId):
     gsf = GameSearchForm()
     game = VideoGame.query.get_or_404(gId)
+    date_to_datetime = datetime.datetime.fromtimestamp(game.releaseDate/1e3)
+    formatted_date = (date_to_datetime.strftime("%m/%d/%y"))
     reviews = Review.query.filter_by(gameId=game.id).all()
     reviewTups = []
     for review in reviews:
         user = User.query.filter_by(id=review.userId).all()[0]
         reviewTups.append((review, user)) 
-    return render_template("game_page.html", current_user=current_user, game=game, reviewTups=reviewTups, gsf=gsf)
+    return render_template("game_page.html", current_user=current_user, game=game, 
+        reviewTups=reviewTups, gsf=gsf, formatted_date=formatted_date)
 
 @login_required
 @app.route('/mygames/')
