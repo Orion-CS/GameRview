@@ -65,7 +65,8 @@ class VideoGame(db.Model):
     image = db.Column(db.Unicode, nullable=False)
     description = db.Column(db.Unicode, nullable=False)
     trailerLink = db.Column(db.Unicode, nullable=True)
-    rating = db.Column(db.Unicode, nullable=True)
+    rating = db.Column(db.Integer, nullable=True)
+    rating_count = db.Column(db.Unicode, nullable=True)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'Users'
@@ -121,9 +122,12 @@ def read_in_games():
         name = game.get('name', "anonymous")
         rating = game.get('rating', 0.0)
         rating_count = game.get('rating_count', 0)
-        summary = game.get('summary', "An awesome game. You should totally play it!!! :)")
+        summary = game.get('summary', "No summary available.")
+
+        # change rating from 0-100 to 0-5
+        changed_rating = (rating/100) * 5
     
-        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image="marioFiller.png", description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=rating)
+        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image="marioFiller.png", description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=changed_rating, rating_count=rating_count)
         all_games.append(new_game)
         
         #vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
