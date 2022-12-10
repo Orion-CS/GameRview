@@ -217,7 +217,7 @@ def home():
     new_games = all_games
     new_games = sorted(new_games, key=lambda x: x.releaseDate, reverse=True)
     new_games = new_games[0:5]
-    
+
     return render_template("home_page.html", current_user=current_user, gsf=gsf, top_games=top_games, new_games=new_games)
 
 
@@ -457,7 +457,6 @@ def post_update_user(id):
             user_to_update.email = form.email.data
         try:
             db.session.commit()
-            flash("Successfully updated credentials.")
             return redirect(url_for('home', user_to_update=current_user))
         except: 
             flash("Error in updating credentials.")
