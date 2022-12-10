@@ -36,6 +36,7 @@ sys.path.append(script_dir)
 
 gameInfoFile = os.path.join(script_dir, "gameInfo.json")
 urlInfoFile = os.path.join(script_dir, "coverURLFile.json")
+studioInfoFile = os.path.join(script_dir, "studioNamesFile.json")
 
 # Identifying the Database File
 dbfile = os.path.join(script_dir + "\database", "gamerview.sqlite3")
@@ -119,6 +120,12 @@ def read_in_games():
     for url in url_data:
         all_urls[url.get("id")] = url.get("url")
 
+    studioName = open(studioInfoFile)
+    name_data = json.load(studioName)
+    all_names = {}
+    for name in name_data:
+        all_names[name.get("id")] = name.get("name")
+
     gameInformation = open(gameInfoFile)
     data = json.load(gameInformation)
     all_games = []
@@ -126,7 +133,8 @@ def read_in_games():
         id = game.get('id', -1)
         temp_cover = game.get('cover', -1)
         cover = all_urls.get(temp_cover, "/static/icons/no_image.jpg")
-        studio = game.get('created_at', "No Studio")
+        temp_studio = game.get('id', -1)
+        studio = all_names.get(temp_studio, "No studio available")
         release = game.get('first_release_date', 0)
         name = game.get('name', "anonymous")
         rating = game.get('rating', 0.0)
@@ -136,7 +144,7 @@ def read_in_games():
         # change rating from 0-100 to 0-5
         changed_rating = (rating/100) * 5
     
-        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image=cover, description=summary, trailerLink=None, rating=changed_rating, rating_count=rating_count)
+        new_game = VideoGame(id=id, title=name, releaseDate=release, studio=studio, image=cover, description=summary, trailerLink=None, rating=changed_rating, rating_count=rating_count)
         all_games.append(new_game)
         
         #vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
