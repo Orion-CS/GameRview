@@ -83,7 +83,7 @@
             {% for game in new_games %}
             <div class="carousel-item {% if loop.index == 1 %}active{% endif %} border-bottom border-warning">
               <a href="/game/{{game.id}}">
-                <img class="d-block " src="\static\icons\{{game.image}}" alt="slide {{loop.index}}">
+                <img class="d-block " src="{{game.image}}" alt="slide {{loop.index}}">
                 <div class="info fade slide-up text-warning carousel-caption d-none d-sm-block">
                   <h4>{{game.title}}</h4>
                   <p>{% if game.rating %} rating: {{game.rating}} {% else %} no ratings yet {% endif %} </p>
@@ -111,7 +111,7 @@
       <div id="row" class="row bg-dark ml-2">
           {% for game in top_games %}
             <a href="/game/{{game.id}}">
-                <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
+                <img class="game" src="{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
                 <div class="info fade slide-up text-warning" > 
                   <p class="info text-warning" id="game-title">{{ game.title }} </p>
                 </div>

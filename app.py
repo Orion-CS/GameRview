@@ -124,7 +124,7 @@ def read_in_games():
     for game in data:
         id = game.get('id', -1)
         temp_cover = game.get('cover', -1)
-        cover = all_urls.get(temp_cover, "none")
+        cover = all_urls.get(temp_cover, "/static/icons/no_image.jpg")
         studio = game.get('created_at', "No Studio")
         release = game.get('first_release_date', 0)
         name = game.get('name', "anonymous")
@@ -135,7 +135,7 @@ def read_in_games():
         # change rating from 0-100 to 0-5
         changed_rating = (rating/100) * 5
     
-        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image=cover, description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=changed_rating, rating_count=rating_count)
+        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image=cover, description=summary, trailerLink=None, rating=changed_rating, rating_count=rating_count)
         all_games.append(new_game)
         
         #vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
