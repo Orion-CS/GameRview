@@ -6,6 +6,7 @@ from flask import Flask, request, render_template, redirect, url_for, abort, ses
 from flask import flash
 import random
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
 # === Temp Data ===
 from tempdata import mario_description
@@ -287,12 +288,15 @@ def post_review(gId):
 def get_game(gId):
     gsf = GameSearchForm()
     game = VideoGame.query.get_or_404(gId)
+    date_to_datetime = datetime.datetime.fromtimestamp(game.releaseDate/1e3)
+    formatted_date = (date_to_datetime.strftime("%m/%d/%y"))
     reviews = Review.query.filter_by(gameId=game.id).all()
     reviewTups = []
     for review in reviews:
         user = User.query.filter_by(id=review.userId).all()[0]
         reviewTups.append((review, user)) 
-    return render_template("game_page.html", current_user=current_user, game=game, reviewTups=reviewTups, gsf=gsf)
+    return render_template("game_page.html", current_user=current_user, game=game, 
+        reviewTups=reviewTups, gsf=gsf, formatted_date=formatted_date)
 
 @login_required
 @app.route('/mygames/')
