@@ -60,7 +60,7 @@ class VideoGame(db.Model):
     __tablename__ = 'VideoGames'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode, nullable=False)
-    releaseDate = db.Column(db.Unicode, nullable=False)
+    releaseDate = db.Column(db.Integer, nullable=False)
     studio = db.Column(db.Unicode, nullable=False)
     image = db.Column(db.Unicode, nullable=False)
     description = db.Column(db.Unicode, nullable=False)
@@ -116,9 +116,9 @@ def read_in_games():
     all_games = []
     for game in data:
         id = game.get('id', -1)
-        cover = game.get('cover', 00000)
+        cover = game.get('cover', 0)
         studio = game.get('created_at', "No Studio")
-        release = game.get('first_release_date', 0000)
+        release = game.get('first_release_date', 0)
         name = game.get('name', "anonymous")
         rating = game.get('rating', 0.0)
         rating_count = game.get('rating_count', 0)
@@ -139,12 +139,6 @@ def read_in_games():
     gameInformation.close()
     return all_games
 
-
-
-def read_in_users():
-    all_users = []
-    # read in users
-    return all_users
 
 # endregion
 
@@ -170,8 +164,7 @@ with app.app_context():
     db.create_all()
 
     db.session.add_all(read_in_games())
-    db.session.add_all(read_in_users())
-    db.session.commit()
+    #db.session.commit()
 
 
 # === Hashing ===
