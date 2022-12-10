@@ -60,12 +60,13 @@ class VideoGame(db.Model):
     __tablename__ = 'VideoGames'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Unicode, nullable=False)
-    releaseDate = db.Column(db.Unicode, nullable=False)
+    releaseDate = db.Column(db.Integer, nullable=False)
     studio = db.Column(db.Unicode, nullable=False)
     image = db.Column(db.Unicode, nullable=False)
     description = db.Column(db.Unicode, nullable=False)
     trailerLink = db.Column(db.Unicode, nullable=True)
-    rating = db.Column(db.Unicode, nullable=True)
+    rating = db.Column(db.Integer, nullable=True)
+    rating_count = db.Column(db.Integer, nullable=True)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'Users'
@@ -115,15 +116,18 @@ def read_in_games():
     all_games = []
     for game in data:
         id = game.get('id', -1)
-        cover = game.get('cover', 00000)
+        cover = game.get('cover', 0)
         studio = game.get('created_at', "No Studio")
-        release = game.get('first_release_date', 0000)
+        release = game.get('first_release_date', 0)
         name = game.get('name', "anonymous")
         rating = game.get('rating', 0.0)
         rating_count = game.get('rating_count', 0)
-        summary = game.get('summary', "An awesome game. You should totally play it!!! :)")
+        summary = game.get('summary', "No summary available.")
+
+        # change rating from 0-100 to 0-5
+        changed_rating = (rating/100) * 5
     
-        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image="marioFiller.png", description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=rating)
+        new_game = VideoGame(id=id, title=name, releaseDate=release, studio="N/A", image="marioFiller.png", description=summary, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A", rating=changed_rating, rating_count=rating_count)
         all_games.append(new_game)
         
         #vg2 = VideoGame(title="Super Mario Bros 3", releaseDate="10/23/88", studio="Nintendo", image="marioFiller.png", description=mario_description, trailerLink="https://www.youtube.com/embed/92bgHaM3B5A")
@@ -135,12 +139,6 @@ def read_in_games():
     gameInformation.close()
     return all_games
 
-
-
-def read_in_users():
-    all_users = []
-    # read in users
-    return all_users
 
 # endregion
 
@@ -166,8 +164,7 @@ with app.app_context():
     db.create_all()
 
     db.session.add_all(read_in_games())
-    db.session.add_all(read_in_users())
-    db.session.commit()
+    #db.session.commit()
 
 
 # === Hashing ===
@@ -223,11 +220,13 @@ def post_register():
         pwd_hash = hasher.hash(form.password.data)
 
         # random user image
-        profile_pics = ["\static\icons\Xbox_button_A.svg.png", "\static\icons\Xbox_button_B.svg.png",
-                            "\static\icons\Xbox_button_X.svg.png","\static\icons\Xbox_button_Y.svg.png"]
+        profile_pics = []
+        image_folder = "static\icons\PFP"
+        for file in os.listdir(image_folder):
+            profile_pics.append(file)
         selected_pic = random.choice(profile_pics)
 
-        userVar = User(profilePic= selected_pic, 
+        userVar = User(profilePic= f"\\{image_folder}\\{selected_pic}", 
             username=form.username.data, 
             email=form.email.data, 
             pwd_hash=pwd_hash)
@@ -254,8 +253,20 @@ def post_review(gId):
     if form.validate():
         # add the review to table
         text = form.review.data if form.review else ""
-        rating = f"{form.rating.data}/5"
+        rating = int(form.rating.data)
         r = Review(text=text, rating=rating, userId=current_user.id, gameId=gId)
+
+        # change rating
+        game = VideoGame.query.filter_by(id=gId).all()[0]
+        cur_rating = game.rating
+        cur_count = game.rating_count
+
+        new_count = cur_count + 1
+        new_rating = cur_rating + ((rating - cur_rating)/new_count)
+
+        game.rating = new_rating
+        game.cur_count = new_count
+
         db.session.add(r)
         db.session.commit()
         return redirect(f"/game/{gId}")
@@ -307,7 +318,7 @@ def get_user(id):
 
         # check if trying to see myself
         if current_user.id == id:
-            redirect(url_for('get_my_games'))
+            return redirect(url_for('get_my_games'))
 
         gsf = GameSearchForm()
         users = User.query.filter_by(id=id).all()

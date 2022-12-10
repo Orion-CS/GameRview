@@ -74,9 +74,13 @@
   </div>
     <div class="row">
       <h1 id="top-games-header">{{game.title}}</h1> 
-      {% if game.rating %}
-        <h6 id="rating-header">{{game.rating}}</h6>
-      {% endif %}
+      <h6 id="rating-header">
+        {% if game.rating %}
+          {{game.rating}}/5
+        {% else %}
+          0/5
+        {% endif %}
+      </h6>
       {% if current_user.is_authenticated %}
         <a id="favorite-button" class="btn btn-dark text-warning mt-auto" style="height:fit-content" role="button"></a>
       {% endif %}

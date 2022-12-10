@@ -112,7 +112,9 @@
           {% for game in top_games %}
             <a href="/game/{{game.id}}">
                 <img class="game" src="\static\icons\{{game.image}}" id ="first-game" alt="" width="150" height="200"/>
-                <div class="info fade slide-up text-warning"> {{game.title}} </div>
+                <div class="info fade slide-up text-warning" > 
+                  <p class="info text-warning" id="game-title">{{ game.title }} </p>
+                </div>
             </a>
           {% endfor %}
       </div>
