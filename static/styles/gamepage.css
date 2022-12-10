@@ -95,6 +95,15 @@
     padding-left: 10px
 }
 
+.swrapper{
+    margin-top: 1px;
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    overflow: hidden;
+    padding-left: 10px
+}
+
 .star-style{
     height: 25px;
     width: 25px;
